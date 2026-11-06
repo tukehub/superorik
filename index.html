@@ -410,7 +410,7 @@ function mkB(w, theme) {
     elephant(x) { L.elephants.push({ x: x * 16, y: 10 * 16 - 19, t: 0, hinted: false }); return b; },
     rocks(x0, x1, period) { L.rockZones.push({ x0: x0 * 16, x1: x1 * 16, period, t: 0 }); return b; },
     fish(x, period, delay = 0) { L.spawns.push({ type: 'fish', x: x * 16, yb: VH + 20, period, delay }); return b; },
-    goal(x) { L.goal = { x: x * 16 }; set(x, 9, T.STONE); return b; },
+    goal(x) { L.goal = { x: x * 16 }; set(x, 9, T.STONE); b.block(x - 5, 7, x - 4, 9); return b; },
     gate(x) { b.block(x, 0, x, 5, T.STONE); for (let y = 6; y <= 9; y++) set(x, y, T.GATE); L.gateX = x; return b; }
   };
   return b;
@@ -464,15 +464,15 @@ function lvBerat() {
 function lvGjiro() {
   const b = mkB(262, 'gjiro'); b.L.noCoins = true;
   b.ground(0, 24).ground(25, 34, 8).ground(35, 44, 6).ground(45, 56, 8).ground(57, 87).ground(88, 95, 8).ground(96, 100, 6).ground(105, 120, 6).ground(121, 127).ground(128, 140, 11).ground(141, 261);
-  b.row(8, 7, 'P').e('beetle', 14).e('hedgehog', 20).e('beetle', 30, 7).cannon(44, 5, -1, 150);
+  b.row(8, 7, 'P').e('beetle', 14).e('hedgehog', 20).e('beetle', 30, 7).cannon(44, 5, -1, 200);
   b.e('hedgehog', 50, 7).e('beetle', 58).e('beetle', 60).block(62, 8, 63, 9).block(64, 5, 68, 9).feather(66, 4);
-  b.cannon(80, 9, -1, 160).e('crow', 84, 4).e('hedgehog', 92, 7);
-  b.row(101, 6, 'CCCC').cp(108).e('beetle', 110, 5).e('hedgehog', 115, 5).row(112, 1, 'H').cannon(120, 5, -1, 140);
+  b.cannon(80, 9, -1, 210, 70).e('crow', 84, 4).e('hedgehog', 92, 7);
+  b.row(101, 6, 'CCCC').cp(108).e('beetle', 110, 5).e('hedgehog', 115, 5).row(112, 1, 'H').cannon(120, 5, -1, 190, 40);
   b.row(129, 8, 'BBBBBBBBBBB').e('hedgehog', 131, 10).e('hedgehog', 137, 10).feather(134, 10);
-  b.e('beetle', 146).cannon(156, 9, -1, 120).block(156, 7, 156, 8).cannon(156, 6, -1, 120, 60);
+  b.e('beetle', 146).cannon(156, 9, -1, 180).block(156, 7, 156, 8).cannon(156, 6, -1, 180, 90);
   b.e('beetle', 170).row(170, 6, 'H').e('crow', 176, 5).row(180, 7, 'CCCC').feather(182, 5);
   b.row(194, 9, 'J').block(196, 4, 198, 9).chest(197, 3);
-  b.e('hedgehog', 210).e('beetle', 216).e('crow', 222, 4).cannon(230, 9, -1, 150).goal(244);
+  b.e('hedgehog', 210).e('beetle', 216).e('crow', 222, 4).cannon(230, 9, -1, 200, 100).goal(244);
   return b.L;
 }
 function lvButrint() {
@@ -497,13 +497,13 @@ function lvKruje() {
   b.row(10, 7, 'P').e('beetle', 16).e('beetle', 19).arc(22, 7, 5).block(26, 8, 28, 9).e('hedgehog', 30).block(31, 8, 33, 9);
   b.rocks(34, 58, 70).e('crow', 45, 4).row(48, 6, '?').row(52, 6, 'P').feather(56, 9);
   b.plat(59, 3, 'y', 6, 0.5).block(62, 2, 70, 9).chest(69, 1).e('crow', 75, 1);
-  b.e('beetle', 76).cannon(84, 9, -1, 110).block(84, 8, 84, 8).cannon(84, 7, -1, 110, 55).cp(90).row(92, 6, 'h').row(96, 9, 'J').row(98, 2, 'SSSSSS').feather(102, 1).e('hedgehog', 104);
+  b.e('beetle', 76).cannon(84, 9, -1, 170).block(84, 8, 84, 8).cannon(84, 7, -1, 170, 85).cp(90).row(92, 6, 'h').row(96, 9, 'J').row(98, 2, 'SSSSSS').feather(102, 1).e('hedgehog', 104);
   b.plat(112, 4, 'y', 5, 0.6).plat(117, 4, 'y', 5, 0.85).rocks(111, 122, 90);
   b.e('hedgehog', 128).e('beetle', 134).e('beetle', 137).e('crow', 142, 5);
-  b.row(150, 10, 'CCCCCCCCCCC').cannon(172, 9, -1, 100);
+  b.row(150, 10, 'CCCCCCCCCCC').cannon(172, 9, -1, 160, 60);
   b.row(176, 7, 'CC').row(178, 5, 'C').block(180, 4, 183, 9).feather(181, 3).cp(190);
   b.rocks(205, 240, 55).e('beetle', 210).e('beetle', 220).e('hedgehog', 230).row(215, 6, 'H');
-  b.e('crow', 250, 4).e('crow', 258, 3).row(254, 6, '?').row(256, 6, 'P').cannon(270, 9, -1, 90).e('beetle', 278).arc(282, 7, 5).goal(296);
+  b.e('crow', 250, 4).e('crow', 258, 3).row(254, 6, '?').row(256, 6, 'P').cannon(270, 9, -1, 150, 30).e('beetle', 278).arc(282, 7, 5).goal(296);
   return b.L;
 }
 function lvTheth() {
@@ -524,10 +524,10 @@ function lvRozafa() {
   const b = mkB(204, 'rozafa');
   b.ground(0, 29).ground(30, 40, 8).ground(41, 55, 6).ground(56, 80).ground(91, 203);
   b.chest(0, 9).arc(4, 7, 4).row(10, 7, 'P').row(10, 3, 'H').e('beetle', 18).e('hedgehog', 24);
-  b.e('beetle', 46, 5).feather(50, 3).cannon(55, 5, -1, 120);
+  b.e('beetle', 46, 5).feather(50, 3).cannon(55, 5, -1, 180, 40);
   b.rocks(60, 80, 80).e('crow', 66, 4).feather(75, 9);
   b.plat(82, 4, 'y', 5, 0.6).plat(86, 6, 'y', 4, 0.9);
-  b.cp(95).e('beetle', 100).e('beetle', 103).cannon(115, 9, -1, 100).block(115, 7, 115, 8).cannon(115, 6, -1, 100, 50);
+  b.cp(95).e('beetle', 100).e('beetle', 103).cannon(115, 9, -1, 160).block(115, 7, 115, 8).cannon(115, 6, -1, 160, 80);
   b.row(126, 9, 'J').block(128, 3, 131, 9).feather(130, 2).e('hedgehog', 140).e('crow', 148, 4);
   b.cp(160).gate(168).row(180, 6, 'P');
   b.block(191, 0, 191, 9).block(198, 9, 199, 9);
@@ -606,17 +606,17 @@ const I18N = {
   sq: {
     canvas: 'Ekrani i lojës Orik', padB: 'vrap · ulli', padA: 'kërce', mute: 'Zëri', pauseBtn: 'Pushim',
     rotT: 'Rrotullo telefonin', rotH: 'Orik vrapon anash. Ktheje telefonin horizontalisht.', fs: 'Ekran i plotë', fsNo: 'Ekrani i plotë nuk lejohet këtu',
-    life30: '30 lekë · +1 jetë', secret: (m, f, n) => `${m} · sekrete ${f}/${n}`, hidBlock: 'Bllok i fshehur!', hidCoins: '+5 lekë të fshehura!', chestLife: 'Thesar! +1 jetë', chestLeke: 'Thesar! +10 lekë',
+    life50: '50 lekë · +1 jetë', secret: (m, f, n) => `${m} · sekrete ${f}/${n}`, hidBlock: 'Bllok i fshehur!', hidCoins: '+5 lekë të fshehura!', chestLife: 'Thesar! +1 jetë', chestLeke: 'Thesar! +10 lekë',
     spring: 'Mbaj A për kërcim më të lartë', gateLocked: n => `Porta hapet vetëm me 3 ${tk().pl} · ${n}/3`, livesLeft: n => `Orik ×${n}`,
     bossIn: 'KUÇEDRA! Kërce mbi kokat e saj ose hidhi ullinj.', bossDown: 'Kuçedra u mund! Liro shqiponjën.', gateOpen: 'Të 3 pendët! Porta e Rozafës u hap!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Mbaroi koha!', cp: 'Pikë kontrolli',
-    needF: n => `Të duhen 3 ${tk().pl} · ke ${n}/3`, flag: 'Flamuri u arrit!', helmet: 'Përkrenarja e Skënderbeut!',
+    needF: n => `Të duhen 3 ${tk().pl} · ke ${n}/3`, flag: n => `Flamuri u arrit! +${n} lekë`, cpMissed: 'Të ka mbetur një pendë prapa! Pika e kontrollit nuk u ruajt.', helmet: 'Përkrenarja e Skënderbeut!',
     popLife: '+1 JETË', popOlive: 'ULLI!', popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'ORTEKU! ', hudFree: 'LIRO SHQIPONJËN', hudFlag: 'KAP FLAMURIN', hudTemple: 'TEMPULLI ▸', bossFled: 'Kuçedra iku drejt jugut! Tani kap flamurin.', elephantHint: 'Kërce mbi elefantin, ai të hedh mbi mur!', bossDown2: 'Kuçedra u mund! Tani kap flamurin.', hudCastle: 'KALAJA ▸',
     lvLabel: i => `NIVELI ${i}`, locked: 'I kyçur', tag: 'Shpëto shqiponjën <span>· një aventurë shqiptare</span>', play: 'Luaj', other: 'English', best: n => `Rekordi: ${n} pikë`,
     help: '<b>Prekje</b> gishti i majtë lëviz, A kërcen, B vrapon dhe hedh ullinj.<br><b>Tastiera</b> shigjetat, Space kërcim, X vrap, P pushim. <b>Kontrolluesi</b> leva, A kërcim, X vrap.',
     storyEye: (i, n) => `HISTORIA · ${i}/${n}`, next: 'Më tej ▸', cont: 'Vazhdo', skip: 'Kapërce',
-    lvEye: (i, n) => `NIVELI ${i} / ${n}`, missionLbl: 'MISIONI', pts: n => `${n} pikë`, introHint: (nc, n) => `${nc ? 'Këtu nuk ka lekë. Thesaret japin jetë.' : 'Çdo 30 lekë = 1 jetë.'} Në këtë nivel fshihen ${n} sekrete.`, startBtn: 'Fillo',
+    lvEye: (i, n) => `NIVELI ${i} / ${n}`, missionLbl: 'MISIONI', pts: n => `${n} pikë`, introHint: (nc, n) => `${nc ? 'Këtu nuk ka lekë. Thesaret japin jetë.' : 'Çdo 50 lekë = 1 jetë.'} Në këtë nivel fshihen ${n} sekrete.`, startBtn: 'Fillo',
     pauseEye: 'PUSHIM', pauseT: 'Merr frymë, Orik', resume: 'Vazhdo', restart: 'Rifillo nivelin', menu: 'Menuja',
     overEye: 'LOJA MBAROI', overT: 'Oriku ra, por nuk u dorëzua', overH: 'Ngrihu dhe provo përsëri. Niveli rifillon me 3 jetë.', again: 'Provo përsëri',
     doneEye: 'NIVELI U KRYE', doneT: n => `${n}: e kryer`, inLevel: n => `${n} në nivel`, secrets: (f, n) => `Sekrete ${f}/${n}`, total: (l, p) => `Gjithsej: ${l} lekë · ${p} pikë`, nextLv: n => `Tjetri · ${n}`,
@@ -631,17 +631,17 @@ const I18N = {
   en: {
     canvas: 'Orik game screen', padB: 'run · olive', padA: 'jump', mute: 'Sound', pauseBtn: 'Pause',
     rotT: 'Rotate your phone', rotH: 'Orik runs sideways. Turn your phone to landscape.', fs: 'Fullscreen', fsNo: 'Fullscreen isn\'t allowed here',
-    life30: '30 lekë · +1 life', secret: (m, f, n) => `${m} · secrets ${f}/${n}`, hidBlock: 'Hidden block!', hidCoins: '+5 hidden lekë!', chestLife: 'Treasure! +1 life', chestLeke: 'Treasure! +10 lekë',
+    life50: '50 lekë · +1 life', secret: (m, f, n) => `${m} · secrets ${f}/${n}`, hidBlock: 'Hidden block!', hidCoins: '+5 hidden lekë!', chestLife: 'Treasure! +1 life', chestLeke: 'Treasure! +10 lekë',
     spring: 'Hold A to bounce higher', gateLocked: n => `Only 3 ${tk().pl} open this gate · ${n}/3`, livesLeft: n => `Orik ×${n}`,
     bossIn: 'KUÇEDRA! Stomp on her heads or throw olives.', bossDown: 'Kuçedra is beaten! Free the eagle.', gateOpen: 'All 3 feathers! The gate of Rozafa is open!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Time\'s up!', cp: 'Checkpoint',
-    needF: n => `You need 3 ${tk().pl} · you have ${n}/3`, flag: 'Flag reached!', helmet: 'Skanderbeg\'s helmet!',
+    needF: n => `You need 3 ${tk().pl} · you have ${n}/3`, flag: n => `Flag reached! +${n} lekë`, cpMissed: 'You left a feather behind! Checkpoint not saved.', helmet: 'Skanderbeg\'s helmet!',
     popLife: '+1 LIFE', popOlive: 'OLIVE!', popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'AVALANCHE! ', hudFree: 'FREE THE EAGLE', hudFlag: 'REACH THE FLAG', hudTemple: 'TEMPLE ▸', bossFled: 'Kuçedra fled south! Now reach the flag.', elephantHint: 'Jump on the elephant and it will toss you over the wall!', bossDown2: 'Kuçedra is beaten! Now reach the flag.', hudCastle: 'CASTLE ▸',
     lvLabel: i => `LEVEL ${i}`, locked: 'Locked', tag: 'Save the eagle <span>· an Albanian adventure</span>', play: 'Play', other: 'Shqip', best: n => `Best: ${n} points`,
     help: '<b>Touch</b> left thumb moves, A jumps, B runs and throws olives.<br><b>Keyboard</b> arrows, Space jump, X run, P pause. <b>Controller</b> stick, A jump, X run.',
     storyEye: (i, n) => `THE STORY · ${i}/${n}`, next: 'Next ▸', cont: 'Continue', skip: 'Skip',
-    lvEye: (i, n) => `LEVEL ${i} / ${n}`, missionLbl: 'MISSION', pts: n => `${n} points`, introHint: (nc, n) => `${nc ? 'No lekë in this town. Treasure chests give lives instead.' : 'Every 30 lekë = 1 extra life.'} This level hides ${n} secrets.`, startBtn: 'Start',
+    lvEye: (i, n) => `LEVEL ${i} / ${n}`, missionLbl: 'MISSION', pts: n => `${n} points`, introHint: (nc, n) => `${nc ? 'No lekë in this town. Treasure chests give lives instead.' : 'Every 50 lekë = 1 extra life.'} This level hides ${n} secrets.`, startBtn: 'Start',
     pauseEye: 'PAUSED', pauseT: 'Catch your breath, Orik', resume: 'Resume', restart: 'Restart level', menu: 'Menu',
     overEye: 'GAME OVER', overT: 'Orik fell, but he did not give up', overH: 'Get back up and try again. The level restarts with 3 lives.', again: 'Try again',
     doneEye: 'LEVEL COMPLETE', doneT: n => `${n}: done`, inLevel: n => `${n} this level`, secrets: (f, n) => `Secrets ${f}/${n}`, total: (l, p) => `Total: ${l} lekë · ${p} points`, nextLv: n => `Next · ${n}`,
@@ -659,11 +659,10 @@ function say(k, ...a) { const v = (I18N[LANG] || I18N.sq)[k]; return typeof v ==
 
 /* ---------------- story ---------------- */
 const STORY_START = [
-  { art: 'eagle', text: 'Na ishte se ç\'na ishte, një shqiponjë me dy krerë, që rrinte mbi flamurin kuq e zi dhe e ruante vendin ditë e natë. Me njërën kokë shihte nga lindja, me tjetrën nga perëndimi. Sa kohë ajo rrinte zgjuar, asnjë e keqe nuk guxonte t\'i kalonte malet.' },
-  { art: 'kucedra', text: 'Por një natë pa hënë, qielli gjëmoi e toka u shkund. Liqeni i Shkodrës u trazua deri në fund. Nga thellësitë e tij doli Kuçedra, me zemër të nxirë nga zilia. Me një të rrahur krahësh rrëmbeu shqiponjën.' },
-  { art: 'kucedra', text: 'E mbylli në një kafaz hekuri, lart në kalanë e Rozafës. Flamujt mbetën bosh, dhe mbi vend ra një heshtje e rëndë.' },
-  { art: 'feather', text: 'Por shqiponja nuk u dorëzua pa luftë. Gjatë gjithë rrugës u përpoq në kthetrat e Kuçedrës, dhe pendët i ranë një nga një mbi qytete, rrënoja e bjeshkë. Pleqtë thonë se vetëm me ato pendë mund të thyhet kafazi i mallkuar.' },
-  { art: 'orik', text: 'Në Vlorë, në shtëpinë e fundit buzë detit, jetonte Oriku me nënën, një djalë flokëverdhë me zemër të madhe. Një mëngjes gjeti në prag një pendë të zezë, ende të ngrohtë. Nëna ia vuri qylafin e bardhë në kokë dhe i tha: «Shko, bir. Mblidhi pendët një nga një. Më jep besën se s\'kthehesh pa shqiponjën.» Oriku ia dha besën. E besa e dhënë nuk thyhet.' }
+  { art: 'eagle', text: 'Na ishte se ç\'na ishte, një shqiponjë me dy krerë që rrinte mbi flamurin kuq e zi dhe e ruante vendin ditë e natë. Me njërën kokë shihte lindjen, me tjetrën perëndimin, dhe asnjë e keqe s\'guxonte t\'i kalonte malet.' },
+  { art: 'kucedra', text: 'Por një natë pa hënë, qielli gjëmoi dhe nga liqeni i Shkodrës doli Kuçedra, me zemër të nxirë nga zilia. Rrëmbeu shqiponjën dhe e mbylli në një kafaz hekuri, lart në kalanë e Rozafës. Flamujt mbetën bosh.' },
+  { art: 'feather', text: 'Por shqiponja nuk u dorëzua pa luftë, dhe pendët i ranë një nga një mbi qytete, rrënoja e bjeshkë. Pleqtë thonë se vetëm me ato pendë thyhet kafazi i mallkuar.' },
+  { art: 'orik', text: 'Në Vlorë, në shtëpinë e fundit buzë detit, jetonte Oriku me nënën, një djalë flokëverdhë me zemër të madhe. Nëna ia vuri qylafin e bardhë në kokë dhe i tha: «Shko, bir. Mblidhi pendët një nga një dhe mos u kthe pa shqiponjën.» Oriku ia dha besën. E besa e dhënë nuk thyhet.' }
 ];
 const THETH_INTRO = [
   { art: 'zana', text: 'Kur Oriku arriti në Theth, këmbët i ishin bërë plumb. Nga pas një shkëmbi doli Zana e Malit, e bardhë si bora e bjeshkës. I dha tri pika qumësht dhe i tha: «Tri pika qumësht mali të bëjnë të shpejtë si era, por s\'zgjasin shumë. Vrapo, bir, para se të të zërë orteku!»' }
@@ -701,11 +700,10 @@ const STORY_EN = {
     { art: 'byrek', text: 'Orik came home to Vlorë with a Finnish scarf around his neck and a plate of pad thai in his hand. His mother was waiting with a tray of byrek. Orik looked at the pad thai, then at the byrek, and ate both. THE END. For real this time.' }
   ],
   start: [
-    { art: 'eagle', text: 'Once upon a time, and what a time it was, there lived a two-headed eagle who sat upon the red and black flag and guarded the land day and night. With one head she watched the east, with the other the west. As long as she stayed awake, no evil dared to cross the mountains.' },
-    { art: 'kucedra', text: 'But one moonless night, the sky thundered and the earth shook. Lake Shkodër churned to its very bottom. From its depths rose the Kuçedra, her heart blackened with envy. With a single beat of her wings, she snatched the eagle away.' },
-    { art: 'kucedra', text: 'She locked her in an iron cage, high in Rozafa Castle. The flags stood empty, and a heavy silence fell over the land.' },
-    { art: 'feather', text: 'But the eagle did not give up without a fight. All the way, she struggled in the Kuçedra\'s claws, and her feathers fell one by one over cities, ruins and mountain pastures. The elders say that only with those feathers can the cursed cage be broken.' },
-    { art: 'orik', text: 'In Vlorë, in the last house by the sea, lived Orik with his mother, a golden-haired boy with a big heart. One morning he found a black feather on the doorstep, still warm. His mother placed the white qylaf on his head and said: “Go, my son. Gather the feathers one by one. Give me your besa that you won\'t return without the eagle.” Orik gave her his besa. And a besa once given is never broken.' }
+    { art: 'eagle', text: 'Once upon a time, and what a time it was, a two-headed eagle sat upon the red and black flag and guarded the land day and night. With one head she watched the east, with the other the west, and no evil dared to cross the mountains.' },
+    { art: 'kucedra', text: 'But one moonless night the sky thundered, and from Lake Shkodër rose the Kuçedra, her heart blackened with envy. She snatched the eagle and locked her in an iron cage, high in Rozafa Castle. The flags stood empty.' },
+    { art: 'feather', text: 'But the eagle did not give up without a fight, and her feathers fell one by one over cities, ruins and mountain pastures. The elders say only those feathers can break the cursed cage.' },
+    { art: 'orik', text: 'In Vlorë, in the last house by the sea, lived Orik with his mother, a golden-haired boy with a big heart. She placed the white qylaf on his head and said: “Go, my son. Gather the feathers one by one, and don\'t come back without the eagle.” Orik gave her his besa. And a besa once given is never broken.' }
   ],
   theth: [
     { art: 'zana', text: 'When Orik reached Theth, his legs felt heavy as lead. From behind a rock appeared the Zana of the Mountain, white as the highland snow. She gave him three drops of milk and said: “Three drops of mountain milk will make you swift as the wind, but not for long. Run, my son, before the avalanche catches you!”' }
@@ -963,7 +961,8 @@ let carry = null; // size/power carried from the end of one level to the start o
 
 function loadLevel(i) {
   levelIdx = i; const def = LEVELS[i];
-  L = def.build(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
+  crumbs.clear();
+  L = def.build(); L.t0 = L.t.slice(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
   tiles = makeTiles(THEMES[L.theme]);
   levelLeke = 0; levelScore = 0; mission = { lambs: 0, keys: 0, pieces: 0, kills: 0, feathers: 0 }; cpActive = null; springHint = false;
   spawnAll();
@@ -988,8 +987,10 @@ function spawnAll() {
   rocks = [];
   for (const [k] of crumbs) { const [tx, ty] = k.split(',').map(Number); L.t[ty * L.w + tx] = T.CRUMBLE; }
   crumbs.clear();
+  if (L.t0) for (let i = 0; i < L.t.length; i++) { const o = L.t0[i]; if ((o === T.QPOW || o === T.BRICK) && L.t[i] !== o) L.t[i] = o; }
   for (const q of L.plats) { q.t = q.phase; const r = q.range, u = q.t % (2 * r), off = u < r ? u : 2 * r - u; q.x = q.axis === 'x' ? q.x0 + off : q.x0; q.y = q.axis === 'y' ? q.y0 + off : q.y0; q.dx = q.dy = 0; }
   for (const c of L.cannons) c.t = c.phase;
+  for (const c of L.cps) c.warned = false;
   for (const z of L.rockZones) z.t = 0;
   player.y = groundYAt(player.x, player.w) - player.h;
   aval = L.aval ? { x: sx - 210, delay: cpActive ? 90 : 150, speed: L.aval.speed } : null;
@@ -1050,7 +1051,7 @@ function sparkle(x, y, n, k) { for (let i = 0; i < (n || 8); i++) { const a = Ma
 function addScore(n) { score += n; levelScore += n; }
 function addLeke(n) {
   const before = totalLeke; levelLeke += n; totalLeke += n; addScore(10 * n);
-  if (Math.floor(totalLeke / 30) > Math.floor(before / 30)) { lives++; sfx('one'); toast(say('life30')); }
+  if (Math.floor(totalLeke / 50) > Math.floor(before / 50)) { lives++; sfx('one'); toast(say('life50')); }
 }
 function foundSecret(msg) { L.secretsFound++; addScore(1000); toast(say('secret', msg, L.secretsFound, L.secretsTotal), 2000); }
 function collectCoin(c) { c.got = true; addLeke(1); sfx('coin'); sparkle(c.x + 5, c.y + 6, 5); }
@@ -1292,8 +1293,10 @@ function updCannons() {
   for (const c of L.cannons) {
     const cx = c.tx * 16; if (cx < cam.x - 40 || cx > cam.x + VW + 80) continue;
     c.t++;
-    if (c.t % c.period === 0) {
-      ents.push({ type: 'ball', x: c.dir < 0 ? cx - 10 : cx + 16, y: c.ty * 16 + 3, w: 10, h: 10, vx: c.dir * 1.5, vy: 0, active: true, dead: false, state: 'live', t: 0, face: c.dir });
+    const k = c.t % c.period;
+    if (k > c.period - 36 && k % 6 === 0) addPart('smoke', c.dir < 0 ? cx - 1 : cx + 15, c.ty * 16 + 6, c.dir * 0.3, -0.35, 22);
+    if (k === 0) {
+      ents.push({ type: 'ball', x: c.dir < 0 ? cx - 10 : cx + 16, y: c.ty * 16 + 3, w: 10, h: 10, vx: c.dir * 1.0, vy: 0, active: true, dead: false, state: 'live', t: 0, face: c.dir });
       sfx('boom'); for (let i = 0; i < 4; i++) addPart('smoke', c.dir < 0 ? cx - 2 : cx + 18, c.ty * 16 + 8, c.dir * Math.random(), -0.3 - Math.random() * 0.4, 30);
     }
   }
@@ -1354,7 +1357,10 @@ function updateWorld() {
       k.got = true; mission.keys++; sfx('key'); sparkle(k.x + 7, k.y + 3, 12);
       if (mission.keys >= 3) openGate(); else toast(`Çelës i gjetur · ${mission.keys}/3`);
     }
-    for (const c of L.cps) if (!c.on && p.x >= c.x) { c.on = true; cpActive = c; sfx('cp'); toast(say('cp'), 1100); }
+    for (const c of L.cps) if (!c.on && p.x >= c.x) {
+      if (L.aval && L.feathers.some(f => !f.got && f.x < c.x)) { if (!c.warned) { c.warned = true; sfx('deny'); toast(say('cpMissed'), 2600); } continue; }
+      c.on = true; cpActive = c; sfx('cp'); toast(say('cp'), 1100);
+    }
     if (L.goal && overlap(p, { x: L.goal.x + 5, y: 24, w: 6, h: 120 })) {
       if (missionMet()) startClear();
       else if (denyT <= 0) { denyT = 100; sfx('deny'); toast(say('needF', mission.feathers)); }
@@ -1370,8 +1376,14 @@ function updateWorld() {
   updCam();
 }
 function startClear() {
-  st = 'clear'; stT = 0; stopMusic(); sfx('clear'); addScore(1000 + (L.def.kind === 'timer' ? Math.round(L.timeLeft) * 20 : 0)); toast(say('flag'), 1500);
-  const p = player; p.vx = 0; p.vy = 0; p.inv = 0; p.x = L.goal.x + 7 - p.w;
+  const p = player, h = clamp((140 - p.y) / 112, 0, 1);
+  const bonus = h >= 0.9 ? 20 : h >= 0.7 ? 10 : h >= 0.45 ? 5 : h >= 0.2 ? 3 : 1;
+  st = 'clear'; stT = 0; stopMusic(); sfx('clear'); addScore(1000 + (L.def.kind === 'timer' ? Math.round(L.timeLeft) * 20 : 0));
+  toast(say('flag', bonus), 1800);
+  addPop(L.goal.x - 14, p.y - 6, `+${bonus} LEKË`);
+  for (let k = 0; k < Math.min(bonus, 8); k++) addPart('coin', L.goal.x + 2, p.y, (k - 3.5) * 0.5, -3.5 - (k % 3) * 0.4, 30);
+  addLeke(bonus);
+  p.vx = 0; p.vy = 0; p.inv = 0; p.x = L.goal.x + 7 - p.w;
 }
 function updClear() {
   stT++; const p = player;
