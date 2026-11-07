@@ -320,28 +320,31 @@ const SHOT = mk(['.KKKK.','KLLLLK','KLlLLK','KLLLLK','KLLLLK','.KKKK.']);
 const FIRE = [mk(['..fFF...','.fFFFF..','fFFfFFF.','FFffFFFF','FFffFFFF','fFFfFFF.','.fFFFF..','..fFF...']), mk(['...FFf..','..FFFFf.','.FFFfFFf','FFFFffFF','FFFFffFF','.FFFfFFf','..FFFFf.','...FFf..'])];
 const EAGLE_HALF = ['.....KK....','....KKKK...','...KKKKK...','..KK.KKK...','......KKK..','K......KKK.','KK......KKK','KKK....KKKK','.KKK..KKKKK','K.KKKKKKKKK','KK.KKKKKKKK','.KK.KKKKKKK','..KK.KKKKKK','...KK.KKKKK','....K.KKKKK','......KKKKK','.......KKKK','......K.KKK','.....K..K.K','........K..'];
 const EAGLE = mk(EAGLE_HALF.map(r => r + r.split('').reverse().join('')));
-const KUCEDRA = both(mk([
-  '..................dd......dd....',
-  '.................dDDd....dDDd...',
-  '................dDDYDd..dDDYDd..',
-  '...............dDDDDDDddDDDDDDd.',
-  '...............dDDDDDRRdDDDDDRR.',
-  '................dDDDd...dDDDd...',
-  '.................dDDd...dDDd....',
-  '..................dDDd.dDDd.....',
-  '...................dDDdDDd......',
-  '....dd.........dddddDDDDd.......',
-  '...dDDd.....ddDDDDDDDDDd........',
-  '..dDd.....dDDDDDDDDDDDDDd.......',
-  '..dDd...ddDDDDBBBBBDDDDDd.......',
-  '...dDdddDDDDBBBBBBBBDDDDd.......',
-  '....dDDDDDDBBBBBBBBBBDDDd.......',
-  '.....dDDDDDBBBBBBBBBBDDd........',
-  '......ddDDDDBBBBBBBBDDDd........',
-  '........dDDDDDDDDDDDDDd.........',
-  '.........dDDd....dDDd...........',
-  '........dDDd......dDDd..........',
-  '.......KKKK......KKKK...........'
+const KUCEDRA = both(mk([ // three heads
+  '......................d................',
+  '.......................dd..............',
+  '.........................ddd...........',
+  '.......................ddDYDdd.........',
+  '.......................dDDDDDDd........',
+  '.......................dDDDDdRRR.......',
+  '......................dDDddddd.........',
+  '....ddd.......d......dDDd..............',
+  '...dDDDd.....dd.....dDDd.....dd........',
+  '..dDddd.....dDDd....dDd....dddddddd....',
+  '.dDd.......dDDDdd..dDDd..ddDDDDDYDDd...',
+  '.dDd......dDDDDDd..dDd.ddDDDddDDDDDDd..',
+  '.dDd.....dDDDDDDDddDDDdDDDdd..dddddRRR.',
+  '.dDd...ddDDDDDDDDDDDDDDDdd...d.........',
+  '..dDdddDDDDDDDDDDDDDDDdd......dd.......',
+  '...dDDDDDDDDDBBBDDDDDd..........ddd....',
+  '....dDDDDBBBBBBBBBBBDDd.....ddddDDYdd..',
+  '.....dDDBBBBBBBBBBBBBDDdddddDDDDDDDDDd.',
+  '.....ddDBBBBBBBBBBBBdddDDDDdddddDDDdRRR',
+  '.......dDBBBBBBBBBBd...dddd.....ddd.d..',
+  '........dDDddddddDDd...................',
+  '........dDd......dDd...................',
+  '........ddd......ddd...................',
+  '.......KKKKK....KKKKK..................'
 ]));
 
 /* ---------------- themes & tiles ---------------- */
@@ -660,18 +663,15 @@ function say(k, ...a) { const v = (I18N[LANG] || I18N.sq)[k]; return typeof v ==
 /* ---------------- story ---------------- */
 const STORY_START = [
   { art: 'eagle', text: 'Na ishte se ç\'na ishte, një shqiponjë me dy krerë që rrinte mbi flamurin kuq e zi dhe e ruante vendin ditë e natë. Me njërën kokë shihte lindjen, me tjetrën perëndimin, dhe asnjë e keqe s\'guxonte t\'i kalonte malet.' },
-  { art: 'kucedra', text: 'Por një natë pa hënë, qielli gjëmoi dhe nga liqeni i Shkodrës doli Kuçedra, me zemër të nxirë nga zilia. Rrëmbeu shqiponjën dhe e mbylli në një kafaz hekuri, lart në kalanë e Rozafës. Flamujt mbetën bosh.' },
-  { art: 'feather', text: 'Por shqiponja nuk u dorëzua pa luftë, dhe pendët i ranë një nga një mbi qytete, rrënoja e bjeshkë. Pleqtë thonë se vetëm me ato pendë thyhet kafazi i mallkuar.' },
+  { art: 'kucedra', text: 'Por një natë pa hënë, nga liqeni i Shkodrës doli Kuçedra me tri krerë, me zemër të nxirë nga zilia. Rrëmbeu shqiponjën dhe e mbylli në një kafaz hekuri në kalanë e Rozafës. Shqiponja luftoi, dhe pendët i ranë mbi qytete, rrënoja e bjeshkë. Vetëm me ato pendë thyhet kafazi.' },
   { art: 'orik', text: 'Në Vlorë, në shtëpinë e fundit buzë detit, jetonte Oriku me nënën, një djalë flokëverdhë me zemër të madhe. Nëna ia vuri qylafin e bardhë në kokë dhe i tha: «Shko, bir. Mblidhi pendët një nga një dhe mos u kthe pa shqiponjën.» Oriku ia dha besën. E besa e dhënë nuk thyhet.' }
 ];
 const THETH_INTRO = [
   { art: 'zana', text: 'Kur Oriku arriti në Theth, këmbët i ishin bërë plumb. Nga pas një shkëmbi doli Zana e Malit, e bardhë si bora e bjeshkës. I dha tri pika qumësht dhe i tha: «Tri pika qumësht mali të bëjnë të shpejtë si era, por s\'zgjasin shumë. Vrapo, bir, para se të të zërë orteku!»' }
 ];
 const STORY_END = [
-  { art: 'kucedra', text: 'Kuçedra ra në humnerën nën kala. Kafazi u thye, dhe shqiponja u lirua.' },
-  { art: 'helmet', text: 'Shqiponja zbriti në thellësi të kalasë, ku Kuçedra fshihte thesaret, dhe u kthye me diçka në kthetra: përkrenaren e Skënderbeut, me kokën e dhisë. «Kush e mban besën, e meriton,» tha, dhe ia vuri Orikut në kokë.' },
-  { art: 'eagle', text: 'Pastaj fluturoi mbi Theth, Krujë, Butrint, Gjirokastër, Berat e Durrës, dhe u ul në mes të flamurit në Vlorë.' },
-  { art: 'byrek', text: 'Oriku u kthye në shtëpi me xhepat plot lekë dhe me përkrenaren që i binte deri te hunda. Nëna e priste me një tavë byrek. E pa, qeshi dhe tha: «S\'ka gjë, bir. Edhe Skënderbeu ka ngrënë shumë byrek derisa i erdhi kjo përkrenare.» Këtë herë Oriku hëngri tre copë.' },
+  { art: 'helmet', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. Nga thellësitë e kalasë ajo solli përkrenaren e Skënderbeut dhe ia vuri Orikut në kokë: «Kush e mban besën, e meriton.»' },
+  { art: 'byrek', text: 'Shqiponja u ul sërish në mes të flamurit, në Vlorë. Oriku u kthye në shtëpi me xhepat plot lekë dhe me përkrenaren deri te hunda. Nëna qeshi: «S\'ka gjë, bir. Edhe Skënderbeu ka ngrënë shumë byrek derisa i erdhi kjo përkrenare.»' },
   { art: 'kucedra', text: 'FUND. Ose ndoshta jo: thellë në liqenin e Shkodrës, diçka hapi sytë.' }
 ];
 const HELSINKI_INTRO = [
@@ -701,18 +701,15 @@ const STORY_EN = {
   ],
   start: [
     { art: 'eagle', text: 'Once upon a time, and what a time it was, a two-headed eagle sat upon the red and black flag and guarded the land day and night. With one head she watched the east, with the other the west, and no evil dared to cross the mountains.' },
-    { art: 'kucedra', text: 'But one moonless night the sky thundered, and from Lake Shkodër rose the Kuçedra, her heart blackened with envy. She snatched the eagle and locked her in an iron cage, high in Rozafa Castle. The flags stood empty.' },
-    { art: 'feather', text: 'But the eagle did not give up without a fight, and her feathers fell one by one over cities, ruins and mountain pastures. The elders say only those feathers can break the cursed cage.' },
+    { art: 'kucedra', text: 'But one moonless night, the three-headed Kuçedra rose from Lake Shkodër, her heart blackened with envy. She snatched the eagle and locked her in an iron cage in Rozafa Castle. The eagle fought back, and her feathers fell over cities, ruins and mountains. Only those feathers can break the cage.' },
     { art: 'orik', text: 'In Vlorë, in the last house by the sea, lived Orik with his mother, a golden-haired boy with a big heart. She placed the white qylaf on his head and said: “Go, my son. Gather the feathers one by one, and don\'t come back without the eagle.” Orik gave her his besa. And a besa once given is never broken.' }
   ],
   theth: [
     { art: 'zana', text: 'When Orik reached Theth, his legs felt heavy as lead. From behind a rock appeared the Zana of the Mountain, white as the highland snow. She gave him three drops of milk and said: “Three drops of mountain milk will make you swift as the wind, but not for long. Run, my son, before the avalanche catches you!”' }
   ],
   end: [
-    { art: 'kucedra', text: 'The Kuçedra fell into the abyss beneath the castle. The cage broke, and the eagle was free.' },
-    { art: 'helmet', text: 'The eagle swooped into the depths of the castle, where the Kuçedra hid her treasures, and returned with something in her claws: the helmet of Skanderbeg, crowned with the goat\'s head. “Whoever keeps their besa deserves it,” she said, and placed it on Orik\'s head.' },
-    { art: 'eagle', text: 'Then she flew over Theth, Krujë, Butrint, Gjirokastër, Berat and Durrës, and settled in the middle of the flag in Vlorë.' },
-    { art: 'byrek', text: 'Orik came home with his pockets full of lekë and a helmet that slid down to his nose. His mother was waiting with a tray of byrek. She looked at him, laughed and said: “Never mind, my son. Skanderbeg ate a lot of byrek too before that helmet fit him.” This time, Orik ate three pieces.' },
+    { art: 'helmet', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. From the depths of the castle she brought back Skanderbeg\'s helmet and placed it on Orik\'s head: “Whoever keeps their besa deserves it.”' },
+    { art: 'byrek', text: 'The eagle settled back in the middle of the flag in Vlorë. Orik came home with his pockets full of lekë and a helmet down to his nose. His mother laughed: “Never mind, my son. Skanderbeg ate a lot of byrek too before that helmet fit him.”' },
     { art: 'kucedra', text: 'THE END. Or maybe not: deep in Lake Shkodër, something opened its eyes.' }
   ]
 };
@@ -1241,7 +1238,7 @@ function updBoss() {
   const period = b.hp > 3 ? 150 : 110;
   if (b.t % period === 0) { if (b.act % 2 === 0 && b.onGround) b.vy = -6.8; else b.fireQ = 3; b.act++; }
   if (b.fireQ > 0 && b.t % 16 === 0) {
-    const offs = [28, 10, 28]; fires.push({ x: b.face > 0 ? b.x + b.w : b.x - 8, y: b.y + offs[b.fireN % 3], w: 8, h: 8, vx: b.face * 1.9, t: 0 });
+    const offs = [28, 10, 0]; fires.push({ x: b.face > 0 ? b.x + b.w / 2 + 30 : b.x + b.w / 2 - 38, y: b.y + offs[b.fireN % 3], w: 8, h: 8, vx: b.face * 1.9, t: 0 });
     b.fireN++; b.fireQ--; sfx('fire');
   }
   const p = player;
@@ -1795,7 +1792,7 @@ function drawEnts() {
     const b = boss, img = KUCEDRA[b.face > 0 ? 0 : 1], bob = b.onGround ? ((b.t >> 3) % 2) : 0;
     ctx.save();
     if (b.dying && !L.bossFlees) { ctx.translate(sx(b.x + b.w / 2), b.y + b.h / 2); ctx.scale(1, -1); ctx.translate(-sx(b.x + b.w / 2), -(b.y + b.h / 2)); }
-    ctx.drawImage(img, sx(b.x + b.w / 2 - 32), Math.round(b.y + b.h - 42) - bob, 64, 42);
+    ctx.drawImage(img, sx(b.x + b.w / 2 - img.width), Math.round(b.y + b.h - img.height * 2) - bob, img.width * 2, img.height * 2);
     ctx.restore();
   }
   for (const f of fires) ctx.drawImage(FIRE[(frame >> 2) % 2], sx(f.x), Math.round(f.y));
