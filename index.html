@@ -536,7 +536,6 @@ function lvRozafa() {
   b.block(191, 0, 191, 9).block(198, 9, 199, 9);
   b.L.arena = { x0: 176, x1: 191, locked: false };
   b.L.cage = { x: 194 * 16, y: 10 * 16 - 32, w: 32, h: 32 };
-  b.L.helmet = { x: 198 * 16 + 7, y: 9 * 16 - 16, flying: false };
   return b.L;
 }
 
@@ -613,7 +612,7 @@ const I18N = {
     spring: 'Mbaj A për kërcim më të lartë', gateLocked: n => `Porta hapet vetëm me 3 ${tk().pl} · ${n}/3`, livesLeft: n => `Orik ×${n}`,
     bossIn: 'KUÇEDRA! Kërce mbi kokat e saj ose hidhi ullinj.', bossDown: 'Kuçedra u mund! Liro shqiponjën.', gateOpen: 'Të 3 pendët! Porta e Rozafës u hap!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Mbaroi koha!', cp: 'Pikë kontrolli',
-    needF: n => `Të duhen 3 ${tk().pl} · ke ${n}/3`, flag: n => `Flamuri u arrit! +${n} lekë`, cpMissed: 'Të ka mbetur një pendë prapa! Pika e kontrollit nuk u ruajt.', helmet: 'Përkrenarja e Skënderbeut!',
+    needF: n => `Të duhen 3 ${tk().pl} · ke ${n}/3`, flag: n => `Flamuri u arrit! +${n} lekë`, cpMissed: 'Të ka mbetur një pendë prapa! Pika e kontrollit nuk u ruajt.',
     popLife: '+1 JETË', popOlive: 'ULLI!', popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'ORTEKU! ', hudFree: 'LIRO SHQIPONJËN', hudFlag: 'KAP FLAMURIN', hudTemple: 'TEMPULLI ▸', bossFled: 'Kuçedra iku drejt jugut! Tani kap flamurin.', elephantHint: 'Kërce mbi elefantin, ai të hedh mbi mur!', bossDown2: 'Kuçedra u mund! Tani kap flamurin.', hudCastle: 'KALAJA ▸',
     lvLabel: i => `NIVELI ${i}`, locked: 'I kyçur', tag: 'Shpëto shqiponjën <span>· një aventurë shqiptare</span>', play: 'Luaj', other: 'English', best: n => `Rekordi: ${n} pikë`,
@@ -623,7 +622,7 @@ const I18N = {
     pauseEye: 'PUSHIM', pauseT: 'Merr frymë, Orik', resume: 'Vazhdo', restart: 'Rifillo nivelin', menu: 'Menuja',
     overEye: 'LOJA MBAROI', overT: 'Oriku ra, por nuk u dorëzua', overH: 'Ngrihu dhe provo përsëri. Niveli rifillon me 3 jetë.', again: 'Provo përsëri',
     doneEye: 'NIVELI U KRYE', doneT: n => `${n}: e kryer`, inLevel: n => `${n} në nivel`, secrets: (f, n) => `Sekrete ${f}/${n}`, total: (l, p) => `Gjithsej: ${l} lekë · ${p} pikë`, nextLv: n => `Tjetri · ${n}`,
-    winEye: 'FITORE', winT: 'Shqiponja është e lirë!', winSub: 'Dhe përkrenarja e Skënderbeut është në kokën e Orikut. Pak e madhe, por e tija.', record: ' · REKORD!', leftLives: n => `×${n} jetë mbetur`, playAgain: 'Luaj përsëri',
+    winEye: 'FITORE', winT: 'Shqiponja është e lirë!', winSub: 'Oriku e mbajti besën. Flamuri ka sërish shqiponjën e vet.', record: ' · REKORD!', leftLives: n => `×${n} jetë mbetur`, playAgain: 'Luaj përsëri',
     bonusLbl: 'BONUS', bonusUnlocked: 'Por aventura nuk mbaroi: Kuçedra fluturoi drejt Helsinkit!', bonusWinT: 'Kuçedra u zhduk përgjithmonë!', bonusWinSub: 'Dritat e veriut ndriçojnë sërish mbi Helsinki, lotuset lulëzojnë në Bangkok, dhe Oriku ka ngrënë më shumë byrek se kurrë.',
     tok: {
       feather: { hud: 'PENDË', one: 'Pendë shqiponje', pl: 'pendë', all: 'Të 3 pendët! Tani kap flamurin.' },
@@ -638,7 +637,7 @@ const I18N = {
     spring: 'Hold A to bounce higher', gateLocked: n => `Only 3 ${tk().pl} open this gate · ${n}/3`, livesLeft: n => `Orik ×${n}`,
     bossIn: 'KUÇEDRA! Stomp on her heads or throw olives.', bossDown: 'Kuçedra is beaten! Free the eagle.', gateOpen: 'All 3 feathers! The gate of Rozafa is open!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Time\'s up!', cp: 'Checkpoint',
-    needF: n => `You need 3 ${tk().pl} · you have ${n}/3`, flag: n => `Flag reached! +${n} lekë`, cpMissed: 'You left a feather behind! Checkpoint not saved.', helmet: 'Skanderbeg\'s helmet!',
+    needF: n => `You need 3 ${tk().pl} · you have ${n}/3`, flag: n => `Flag reached! +${n} lekë`, cpMissed: 'You left a feather behind! Checkpoint not saved.',
     popLife: '+1 LIFE', popOlive: 'OLIVE!', popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'AVALANCHE! ', hudFree: 'FREE THE EAGLE', hudFlag: 'REACH THE FLAG', hudTemple: 'TEMPLE ▸', bossFled: 'Kuçedra fled south! Now reach the flag.', elephantHint: 'Jump on the elephant and it will toss you over the wall!', bossDown2: 'Kuçedra is beaten! Now reach the flag.', hudCastle: 'CASTLE ▸',
     lvLabel: i => `LEVEL ${i}`, locked: 'Locked', tag: 'Save the eagle <span>· an Albanian adventure</span>', play: 'Play', other: 'Shqip', best: n => `Best: ${n} points`,
@@ -648,7 +647,7 @@ const I18N = {
     pauseEye: 'PAUSED', pauseT: 'Catch your breath, Orik', resume: 'Resume', restart: 'Restart level', menu: 'Menu',
     overEye: 'GAME OVER', overT: 'Orik fell, but he did not give up', overH: 'Get back up and try again. The level restarts with 3 lives.', again: 'Try again',
     doneEye: 'LEVEL COMPLETE', doneT: n => `${n}: done`, inLevel: n => `${n} this level`, secrets: (f, n) => `Secrets ${f}/${n}`, total: (l, p) => `Total: ${l} lekë · ${p} points`, nextLv: n => `Next · ${n}`,
-    winEye: 'VICTORY', winT: 'The eagle is free!', winSub: 'And Skanderbeg\'s helmet sits on Orik\'s head. A little big, but it\'s his.', record: ' · NEW RECORD!', leftLives: n => `×${n} lives left`, playAgain: 'Play again',
+    winEye: 'VICTORY', winT: 'The eagle is free!', winSub: 'Orik kept his besa. The flag has its eagle back.', record: ' · NEW RECORD!', leftLives: n => `×${n} lives left`, playAgain: 'Play again',
     bonusLbl: 'BONUS', bonusUnlocked: 'But the adventure is not over: Kuçedra flew to Helsinki!', bonusWinT: 'Kuçedra is gone for good!', bonusWinSub: 'The northern lights shine over Helsinki again, the lotuses bloom in Bangkok, and Orik has eaten more byrek than ever.',
     tok: {
       feather: { hud: 'FEATHERS', one: 'Eagle feather', pl: 'feathers', all: 'All 3 feathers! Now reach the flag.' },
@@ -670,8 +669,8 @@ const THETH_INTRO = [
   { art: 'zana', text: 'Kur Oriku arriti në Theth, këmbët i ishin bërë plumb. Nga pas një shkëmbi doli Zana e Malit, e bardhë si bora e bjeshkës. I dha tri pika qumësht dhe i tha: «Tri pika qumësht mali të bëjnë të shpejtë si era, por s\'zgjasin shumë. Vrapo, bir, para se të të zërë orteku!»' }
 ];
 const STORY_END = [
-  { art: 'helmet', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. Nga thellësitë e kalasë ajo solli përkrenaren e Skënderbeut dhe ia vuri Orikut në kokë: «Kush e mban besën, e meriton.»' },
-  { art: 'byrek', text: 'Shqiponja u ul sërish në mes të flamurit, në Vlorë. Oriku u kthye në shtëpi me xhepat plot lekë dhe me përkrenaren deri te hunda. Nëna qeshi: «S\'ka gjë, bir. Edhe Skënderbeu ka ngrënë shumë byrek derisa i erdhi kjo përkrenare.»' },
+  { art: 'eagle', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. U ngrit mbi Shkodër dhe i tha Orikut: «Ti e mbajte besën, bir. Kjo nuk harrohet kurrë.»' },
+  { art: 'byrek', text: 'Shqiponja u ul sërish në mes të flamurit, në Vlorë. Oriku u kthye në shtëpi me xhepat plot lekë. Nëna e priste me një tavë byrek, dhe këtë herë Oriku hëngri tre copë.' },
   { art: 'kucedra', text: 'FUND. Ose ndoshta jo: thellë në liqenin e Shkodrës, diçka hapi sytë.' }
 ];
 const HELSINKI_INTRO = [
@@ -708,8 +707,8 @@ const STORY_EN = {
     { art: 'zana', text: 'When Orik reached Theth, his legs felt heavy as lead. From behind a rock appeared the Zana of the Mountain, white as the highland snow. She gave him three drops of milk and said: “Three drops of mountain milk will make you swift as the wind, but not for long. Run, my son, before the avalanche catches you!”' }
   ],
   end: [
-    { art: 'helmet', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. From the depths of the castle she brought back Skanderbeg\'s helmet and placed it on Orik\'s head: “Whoever keeps their besa deserves it.”' },
-    { art: 'byrek', text: 'The eagle settled back in the middle of the flag in Vlorë. Orik came home with his pockets full of lekë and a helmet down to his nose. His mother laughed: “Never mind, my son. Skanderbeg ate a lot of byrek too before that helmet fit him.”' },
+    { art: 'eagle', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. She rose over Shkodër and said to Orik: “You kept your besa, my son. That is never forgotten.”' },
+    { art: 'byrek', text: 'The eagle settled back in the middle of the flag in Vlorë. Orik came home with his pockets full of lekë. His mother was waiting with a tray of byrek, and this time Orik ate three pieces.' },
     { art: 'kucedra', text: 'THE END. Or maybe not: deep in Lake Shkodër, something opened its eyes.' }
   ]
 };
@@ -1396,14 +1395,6 @@ function startFreeing() {
 function updFreeing() {
   stT++;
   if (stT > 30) L.eagleY -= 0.7;
-  const hm = L.helmet, p = player;
-  // The eagle brings the helmet up from Kuçedra's hoard and drops it on Orik as a reward
-  if (hm && !p.helmet && stT > 70) {
-    if (!hm.flying) { hm.flying = true; hm.x = L.cage.x + 7; hm.y = L.eagleY + 4; sparkle(hm.x + 9, hm.y + 8, 10); }
-    const tx = p.x + p.w / 2 - 9, ty = p.y - 20;
-    hm.x += (tx - hm.x) * 0.06; hm.y += (ty - hm.y) * 0.06 - (stT < 110 ? 1.2 : 0);
-    if (stT > 150) { p.helmet = true; sparkle(p.x + p.w / 2, p.y, 14); sfx('power'); toast(say('helmet'), 2200); }
-  }
   if (stT % 6 === 0) sparkle(L.cage.x + 16 + (Math.random() - 0.5) * 30, L.eagleY + 10, 2, Math.random() < 0.5 ? 'heart' : 'spark');
   updParts(); updCam();
   if (stT > 230) showStory(storyEnd(), 0, victory);
@@ -1770,8 +1761,6 @@ function drawCoins() {
   for (const c of L.chests) { const x = sx(c.x); if (x < -20 || x > VW) continue; ctx.drawImage(c.got ? CHEST_OPEN : CHEST, x, c.y); if (!c.got && frame % 50 < 3) { ctx.fillStyle = '#fff'; ctx.fillRect(x + 11, c.y + 2, 1, 1); } }
   for (const q of L.pieces) { if (q.got) continue; const x = sx(q.x); if (x < -20 || x > VW) continue; const bob = Math.round(Math.sin(frame * 0.09 + q.x) * 2); ctx.drawImage(PIECE, x, q.y + bob); }
   for (const f of L.feathers) { if (f.got) continue; const x = sx(f.x); if (x < -20 || x > VW) continue; const bob = Math.round(Math.sin(frame * 0.07 + f.x) * 2); ctx.drawImage(TOKEN_SPR[L.tok || 'feather'], x, f.y + bob); if (frame % 40 < 4) { ctx.fillStyle = '#fff6c8'; ctx.fillRect(x + 7, f.y + bob + 1, 1, 1); } }
-  // Helmet stays hidden until the eagle brings it out as the reward
-  if (L.helmet && L.helmet.flying && !(player && player.helmet)) drawHelmetAt(sx(L.helmet.x), L.helmet.y, 1);
   for (const k of L.keys) { if (k.got) continue; const x = sx(k.x); if (x < -20 || x > VW) continue; const bob = Math.round(Math.sin(frame * 0.08) * 2); ctx.drawImage(KEY, x, k.y + bob); if (frame % 30 < 3) { ctx.fillStyle = '#fff'; ctx.fillRect(x + 2, k.y + bob - 1, 1, 1); } }
 }
 function drawEnts() {
@@ -1809,8 +1798,6 @@ function drawPlayer() {
   const img = set[fn][p.face > 0 ? 0 : 1];
   const top = Math.round(p.y + p.h - img.height);
   ctx.drawImage(img, sx(p.x + p.w / 2 - 8), top);
-  // Skanderbeg's helmet is too big for Orik: it slides down over his eyes and wobbles when he walks
-  if (p.helmet) { const wob = p.onGround && Math.abs(p.vx) > 0.1 ? (Math.floor(p.anim) % 2) : 0; drawHelmetAt(sx(p.x + p.w / 2 - 9), top - 9 + wob, 1); }
 }
 function drawParts() {
   for (const q of parts) {
@@ -1973,11 +1960,11 @@ function victory(bonus) {
   bonus = bonus === true;
   st = 'victory'; setHud(false); save.unlocked = bonus ? NLV : Math.max(save.unlocked, 9); persist(); const rec = recordBest();
   showScreen(`<div class="card">
-    <div class="row"><div class="flagbox"><canvas id="vEagle" width="22" height="20"></canvas></div><div class="flagbox helm"><canvas id="vHelm" width="18" height="16"></canvas></div></div>
+    <div class="row"><div class="flagbox"><canvas id="vEagle" width="22" height="20"></canvas></div></div>
     <p class="eyebrow">${say('winEye')}</p><h2>${say(bonus ? 'bonusWinT' : 'winT')}</h2><p class="en">${say(bonus ? 'bonusWinSub' : 'winSub')}</p>${bonus ? '' : `<p class="hint">${say('bonusUnlocked')}</p>`}
     <div class="stats"><span><span class="coin">L</span>${totalLeke} lekë</span><span>${say('pts', score)}${rec ? say('record') : ""}</span><span><span class="plis"></span>${say('leftLives', lives)}</span></div>
     <div class="row">${bonus ? `<button class="btn red" id="bAgain" type="button">${say('playAgain')}</button>` : `<button class="btn red" id="bNext" type="button">${say('nextLv', lv(8).name)}</button>`}<button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
-  paintEagle($('vEagle')); { const c = $('vHelm').getContext('2d'); c.imageSmoothingEnabled = false; c.drawImage(HELMET, 0, 0); }
+  paintEagle($('vEagle'));
   on('bAgain', () => newGame(0)); on('bNext', () => startLevel(8)); on('bQuit', toTitle);
 }
 
