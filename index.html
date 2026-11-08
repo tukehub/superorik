@@ -57,7 +57,7 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-bo
 #pad.show{display:block}
 .tb{position:absolute;width:76px;height:76px;border-radius:50%;border:3px solid rgba(246,240,228,.45);background:rgba(20,15,18,.3);
   color:rgba(246,240,228,.9);display:grid;place-items:center;align-content:center;gap:2px;font-family:var(--font-display);font-size:20px;font-weight:900;pointer-events:none}
-.tb small{font-family:var(--font-body);font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.tb small{font-family:var(--font-body);font-size:10px;font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase;text-align:center;white-space:pre-line;opacity:.85}
 .tb svg{width:26px;height:26px;fill:currentColor}
 .tb.on{background:rgba(215,38,61,.6);border-color:var(--paper)}
 #tL{left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}
@@ -126,7 +126,8 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-bo
   <div id="pad" aria-hidden="true">
     <div class="tb" id="tL"><svg viewBox="0 0 20 20"><path d="M14 3 5 10l9 7z"/></svg></div>
     <div class="tb" id="tR"><svg viewBox="0 0 20 20"><path d="M6 3l9 7-9 7z"/></svg></div>
-    <div class="tb" id="tB"><span>B</span><small id="sPadB">vrap · ulli</small></div>
+    <div class="tb" id="tB"><span>B</span><small id="sPadB">vrap
+ulli</small></div>
     <div class="tb" id="tA"><span>A</span><small id="sPadA">kërce</small></div>
   </div>
   <div id="hud" hidden>
@@ -170,7 +171,7 @@ function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save));
 /* ---------------- sprites ---------------- */
 const PAL = { K:'#1a1418', W:'#f4f1e8', R:'#d7263d', r:'#8e1b2a', S:'#f0b58a', s:'#c9855a', O:'#6b3e26',
   Y:'#f5c542', y:'#b8860b', G:'#3aa655', g:'#1f6b35', P:'#5b3a8c', p:'#3a2560', L:'#55661f', l:'#8a9a3a',
-  T:'#e3a857', t:'#a0612b', D:'#2e7d4f', d:'#163d27', B:'#8fcf6a', F:'#ff8c1a', f:'#ffd23f', H:'#8b5a3c', h:'#5e3a24', E:'#d9d4c8', A:'#f4d35e', a:'#c99a2e', u:'#fbe3a4', n:'#4a8a2c', N:'#2f5e1c', c:'#f3ead2', X:'#b4202f', Q:'#e4e7eb', V:'#8f959e', q:'#6fa8cf', j:'#3d6f93' };
+  T:'#e3a857', t:'#a0612b', D:'#2e7d4f', d:'#163d27', B:'#8fcf6a', F:'#ff8c1a', f:'#ffd23f', H:'#8b5a3c', h:'#5e3a24', E:'#d9d4c8', A:'#f4d35e', a:'#c99a2e', u:'#fbe3a4', n:'#4a8a2c', N:'#2f5e1c', c:'#f3ead2', X:'#b4202f', v:'#3b4a9c', m:'#1f2659', i:'#9fb0ee', o:'#e0352b', z:'#8f1a12', e:'#ff9a7a', Q:'#e4e7eb', V:'#8f959e', q:'#6fa8cf', j:'#3d6f93' };
 function mk(rows, pal) {
   pal = pal || PAL;
   const h = rows.length, w = Math.max(...rows.map(r => r.length));
@@ -214,8 +215,8 @@ const TH_PAL = Object.assign({}, PAL, { R: '#f3ead2', W: '#e2b048' });
 const thLeg = r => r.replace(/K/g, 'P').replace(/O/g, 'K');
 const OUTFIT = {
   al: { base: ORIK, olive: ORIK_OLIVE },
-  fi: { base: orikSet(FI_PAL, OH_FI, fiLeg, OT_FI, OTJ_FI), olive: orikSet(Object.assign({}, FI_PAL, { j: '#6f8f2a' }), OH_FI, fiLeg, OT_FI, OTJ_FI) },
-  th: { base: orikSet(TH_PAL, OH_TH, thLeg), olive: orikSet(Object.assign({}, TH_PAL, OLIVE_PAL), OH_TH, thLeg) }
+  fi: { base: orikSet(FI_PAL, OH_FI, fiLeg, OT_FI, OTJ_FI), olive: orikSet(Object.assign({}, FI_PAL, { j: '#4b2a7a' }), OH_FI, fiLeg, OT_FI, OTJ_FI) },
+  th: { base: orikSet(TH_PAL, OH_TH, thLeg), olive: orikSet(Object.assign({}, TH_PAL, { R: '#e0352b', r: '#8f1a12' }), OH_TH, thLeg) }
 };
 
 const COIN = mk(['....YYYYY....','..YYYYYYYYY..','.YYyyyyyyyYY.','.YyYYYYYYYyY.','YyYYyYYYYYYyY','YyYYyYYYYYYyY','YyYYyYYYYYYyY','YyYYyYYYYYYyY','YyYYyyyyYYYyY','.YyYYYYYYYyY.','.YYyyyyyyyYY.','..YYYYYYYYY..','....YYYYY....']);
@@ -239,7 +240,11 @@ const OLIVE = mk(['........gG....','.......gGG....','......gG......','....KKKKKK
 // Local snacks that replace byrek as the grow power-up: Thai salapao (steamed bun) and Finnish lihapiirakka (fried meat pie)
 const SALAPAO = mk(['.....WWWW.....','...WWWRRWWW...','..WWWWRRWWWW..','.WWWWWWWWWWWW.','WWWWWWWWWWWWWW','WWWWWWWWWWWWWW','WEWWWWWWWWWWEW','.EEWWWWWWWWEE.','..EEEEEEEEEE..','.uuuuuuuuuuuu.']);
 const PIIRAKKA = mk(['....tttttt....','..ttTTTTTTtt..','.tTTTuTTTTTTt.','tTTuTTTTTuTTTt','tTTTTTTTTTTTTt','tTTTTTuTTTTTTt','.tTTTTTTTTTTt.','..ttTTTTTTtt..','....tttttt....']);
-const ITEM_SPR = { byrek: BYREK, olive: OLIVE, plis: PLIS, salapao: SALAPAO, piirakka: PIIRAKKA };
+// Local stand-ins for the olive power-up: Finnish blueberry (mustikka) and Thai bird's-eye chili
+const BLUEBERRY = mk(['.....gG.....','....gGGg....','...mmmmmm...','..mvvvvvvm..','.mviivvvvvm.','.mviivvvvvm.','.mvvvvvvvvm.','.mvvvmmvvvm.','..mvvvvvvm..','...mmmmmm...']);
+const CHILI = mk(['..........gg..','.........gG...','.......ooog...','.....ooeoooz..','....oeoooozz..','...oeooooz....','..ooooozz.....','.oooozz.......','ooozz.........','.oz...........']);
+const ITEM_SPR = { byrek: BYREK, olive: OLIVE, plis: PLIS, salapao: SALAPAO, piirakka: PIIRAKKA, blueberry: BLUEBERRY, chili: CHILI };
+const POWS = { olive: 1, blueberry: 1, chili: 1 };
 const ITEM_POP = { salapao: 'SALAPAO!', piirakka: 'LIHAPIIRAKKA!' };
 const FEATHER = mk(['.......KK.','......KhWK','.....KhhWK','....KhHWhK','....KhWHhK','...KhHWhK.','...KhWHhK.','..KhHWhK..','..KhWhhK..','.KhHWhK...','.KhWhK....','KhWhK.....','.KWK......','..W.......']);
 const HELMET = mk([
@@ -317,6 +322,7 @@ const CANNON = both(mk([
 const ROCK = mk(['...KKKK...','.KKVVVVKK.','KVVQQVVVVK','KVQVVVVVVK','KVVVVVVKVK','KVVVVKVVVK','.KVVVVVVK.','..KKKKKK..']);
 
 const SHOT = mk(['.KKKK.','KLLLLK','KLlLLK','KLLLLK','KLLLLK','.KKKK.']);
+const SHOT_SPR = { olive: SHOT, blueberry: mk(['.mmmm.','mviivm','mvivvm','mvvvvm','mvvmvm','.mmmm.']), chili: mk(['....g.','..oog.','.oeoz.','ooozz.','ozz...','z.....']) };
 const FIRE = [mk(['..fFF...','.fFFFF..','fFFfFFF.','FFffFFFF','FFffFFFF','fFFfFFF.','.fFFFF..','..fFF...']), mk(['...FFf..','..FFFFf.','.FFFfFFf','FFFFffFF','FFFFffFF','.FFFfFFf','..FFFFf.','...FFf..'])];
 const EAGLE_HALF = ['.....KK....','....KKKK...','...KKKKK...','..KK.KKK...','......KKK..','K......KKK.','KK......KKK','KKK....KKKK','.KKK..KKKKK','K.KKKKKKKKK','KK.KKKKKKKK','.KK.KKKKKKK','..KK.KKKKKK','...KK.KKKKK','....K.KKKKK','......KKKKK','.......KKKK','......K.KKK','.....K..K.K','........K..'];
 const EAGLE = mk(EAGLE_HALF.map(r => r + r.split('').reverse().join('')));
@@ -413,7 +419,22 @@ function mkB(w, theme) {
     elephant(x) { L.elephants.push({ x: x * 16, y: 10 * 16 - 19, t: 0, hinted: false }); return b; },
     rocks(x0, x1, period) { L.rockZones.push({ x0: x0 * 16, x1: x1 * 16, period, t: 0 }); return b; },
     fish(x, period, delay = 0) { L.spawns.push({ type: 'fish', x: x * 16, yb: VH + 20, period, delay }); return b; },
-    goal(x) { L.goal = { x: x * 16 }; set(x, 9, T.STONE); b.block(x - 5, 7, x - 4, 9); return b; },
+    goal(x) {
+      L.goal = { x: x * 16 }; set(x, 9, T.STONE);
+      const ramps = {
+        vlore: () => b.block(x - 6, 8, x - 6, 9).block(x - 5, 7, x - 4, 9),                                    // quay steps
+        beach: () => b.bunker(x - 7, 3),                                                                        // one last bunker
+        berat: () => b.block(x - 7, 8, x - 5, 9).row(x - 7, 7, 'CCC'),                                          // house with a crumbling roof
+        gjiro: () => b.block(x - 7, 8, x - 7, 9).block(x - 5, 6, x - 5, 9),                                     // step and a stone tower
+        butrint: () => b.block(x - 8, 8, x - 8, 9).block(x - 6, 7, x - 6, 9).block(x - 4, 9, x - 4, 9),         // broken columns
+        kruje: () => b.block(x - 7, 7, x - 4, 9).row(x - 7, 6, 'S').row(x - 5, 6, 'S'),                         // crenellated wall
+        theth: () => b.block(x - 8, 9, x - 5, 9).block(x - 7, 8, x - 4, 8).block(x - 6, 7, x - 5, 7),           // pile of boulders
+        helsinki: () => b.block(x - 8, 8, x - 7, 9).block(x - 5, 6, x - 4, 9),                                  // two ice blocks
+        bangkok: () => b.block(x - 8, 9, x - 4, 9).block(x - 7, 8, x - 5, 8).block(x - 6, 6, x - 6, 7)          // little stupa
+      };
+      (ramps[L.theme] || (() => b.block(x - 5, 7, x - 4, 9)))();
+      return b;
+    },
     gate(x) { b.block(x, 0, x, 5, T.STONE); for (let y = 6; y <= 9; y++) set(x, y, T.GATE); L.gateX = x; return b; }
   };
   return b;
@@ -480,13 +501,15 @@ function lvGjiro() {
 }
 function lvButrint() {
   const b = mkB(300, 'butrint');
-  b.ground(0, 20).ground(45, 80).ground(119, 210).ground(226, 299);
+  b.ground(0, 20).ground(45, 80).ground(119, 126).ground(135, 210).ground(226, 299);
   b.arc(5, 7, 5).row(12, 7, 'P').e('beetle', 17);
   [[23, 8], [26, 6], [29, 7], [32, 5], [35, 7], [38, 6], [41, 8]].forEach(([x, t]) => b.block(x, t, x, 11));
   b.feather(32, 4).fish(24, 110, 0).fish(30, 130, 40).fish(36, 90, 70).fish(43, 120, 20);
   b.e('hedgehog', 50).e('beetle', 55).e('beetle', 58).row(60, 6, '?').row(62, 4, '?').row(64, 6, '?').row(62, 1, 'h').cp(70).e('crow', 75, 4);
   b.plat(81, 9, 'x', 4, 0.7, 4).plat(90, 8, 'x', 4, 0.7, 4).plat(100, 9, 'x', 4, 0.7, 4).plat(109, 8, 'x', 4, 0.7, 5, 64).feather(95, 5).fish(88, 100, 30).fish(98, 120, 0).fish(108, 90, 60).e('crow', 104, 3);
-  b.block(125, 7, 130, 9).block(126, 5, 126, 6).block(128, 5, 128, 6).row(125, 2, 'SSSSS').row(130, 6, 'J').chest(127, 1);
+  // Ruined temple: climb the fallen masonry, cross the architrave (its middle stones crumble) over the flooded crypt
+  b.block(121, 9, 121, 9).block(122, 8, 123, 9).block(124, 6, 125, 9).block(126, 5, 126, 9).block(135, 5, 135, 9);
+  b.row(126, 4, 'SSS').row(129, 4, 'CCCC').row(133, 4, 'SSS').row(131, 1, 'H').fish(130, 100, 0).fish(133, 80, 45).e('crow', 143, 3);
   b.e('beetle', 138).e('hedgehog', 145).e('crow', 150, 4).row(154, 8, 'CC').row(156, 6, 'CC').row(158, 4, 'CC').feather(159, 3);
   b.cp(172).e('beetle', 180).e('beetle', 183).e('hedgehog', 192).e('crow', 198, 5).arc(200, 7, 6);
   b.row(211, 10, 'CCCCCCCCCCCCCCC');
@@ -558,22 +581,22 @@ function lvHelsinki() {
   b.plat(271, 9, 'x', 4, 0.7, 3);
   b.rocks(280, 306, 50).e('beetle', 286).e('hedgehog', 294).row(298, 6, '?').e('crow', 304, 4).e('beetle', 310).arc(312, 7, 5).cp(317).row(328, 6, 'P').block(338, 0, 338, 9).goal(352);
   b.L.arena = { x0: 322, x1: 338, locked: false }; b.L.bossFlees = true; b.L.bossHp = 6;
-  b.L.ice = true; b.L.tok = 'aurora'; b.L.snack = 'piirakka'; b.L.outfit = 'fi'; b.L.flag = 'fi';
+  b.L.ice = true; b.L.tok = 'aurora'; b.L.snack = 'piirakka'; b.L.pow = 'blueberry'; b.L.outfit = 'fi'; b.L.flag = 'fi';
   return b.L;
 }
 function lvBangkok() {
   const b = mkB(236, 'bangkok');
   b.ground(0, 28).ground(60, 110).ground(130, 235);
   b.arc(5, 7, 5).row(11, 7, 'P').e('beetle', 17).e('hedgehog', 23);
-  b.plat(29, 9, 'x', 4, 0.7, 4).plat(38, 9, 'x', 4, 0.6, 4, 40).plat(47, 9, 'x', 5, 0.8, 4).plat(55, 9, 'x', 2, 0.6, 3).feather(44, 5);
+  b.plat(29, 9, 'x', 4, 0.7, 5).plat(38, 9, 'x', 4, 0.6, 5, 40).plat(47, 9, 'x', 4, 0.8, 5).plat(56, 9, 'x', 1, 0.6, 4).feather(44, 5);
   b.fish(33, 110, 0).fish(42, 90, 40).fish(52, 120, 20).e('crow', 45, 4);
   b.cp(62).e('beetle', 66).e('beetle', 69).block(74, 7, 77, 9).feather(76, 6).e('crow', 82, 4);
   b.row(86, 6, '?').row(88, 6, 'P').row(90, 6, '?').row(88, 2, 'h').e('hedgehog', 96).row(100, 9, 'J').row(102, 3, 'SSSS').chest(104, 2);
-  b.plat(111, 9, 'x', 4, 0.7, 4).plat(120, 8, 'x', 4, 0.8, 4, 30).feather(122, 5).fish(115, 100, 0).fish(125, 120, 50);
+  b.plat(111, 9, 'x', 4, 0.7, 5).plat(120, 8, 'x', 4, 0.8, 5, 30).feather(122, 5).fish(115, 100, 0).fish(125, 120, 50);
   b.cp(134).e('beetle', 138).elephant(142).block(146, 5, 147, 9).e('hedgehog', 152).e('crow', 156, 4).row(158, 6, 'H').cp(162).gate(168).row(180, 6, 'P');
   b.block(191, 0, 191, 9).e('beetle', 200).goal(210);
   b.L.arena = { x0: 176, x1: 191, locked: false };
-  b.L.tok = 'lotus'; b.L.snack = 'salapao'; b.L.outfit = 'th'; b.L.flag = 'th';
+  b.L.tok = 'lotus'; b.L.snack = 'salapao'; b.L.pow = 'chili'; b.L.outfit = 'th'; b.L.flag = 'th';
   return b.L;
 }
 
@@ -604,16 +627,21 @@ const LEVELS_EN = [
 ];
 let LANG = 'sq';
 const lv = i => LANG === 'en' ? LEVELS_EN[i] : LEVELS[i];
+const POW_T = {
+  sq: { olive: { pop: 'ULLI!', pad: 'ulli', pl: 'ullinj' }, blueberry: { pop: 'BORONICË!', pad: 'boronicë', pl: 'boronica' }, chili: { pop: 'SPEC DJEGËS!', pad: 'spec', pl: 'speca djegës' } },
+  en: { olive: { pop: 'OLIVE!', pad: 'olive', pl: 'olives' }, blueberry: { pop: 'BLUEBERRY!', pad: 'berry', pl: 'blueberries' }, chili: { pop: 'CHILI!', pad: 'chili', pl: 'chilies' } }
+};
+const powKey = () => (L && L.pow) || 'olive';
 const I18N = {
   sq: {
-    canvas: 'Ekrani i lojës Orik', padB: 'vrap · ulli', padA: 'kërce', mute: 'Zëri', pauseBtn: 'Pushim',
+    canvas: 'Ekrani i lojës Orik', padB: k => `vrap\n${POW_T.sq[k].pad}`, padA: 'kërce', mute: 'Zëri', pauseBtn: 'Pushim',
     rotT: 'Rrotullo telefonin', rotH: 'Orik vrapon anash. Ktheje telefonin horizontalisht.', fs: 'Ekran i plotë', fsNo: 'Ekrani i plotë nuk lejohet këtu',
     life50: '50 lekë · +1 jetë', secret: (m, f, n) => `${m} · sekrete ${f}/${n}`, hidBlock: 'Bllok i fshehur!', hidCoins: '+5 lekë të fshehura!', chestLife: 'Thesar! +1 jetë', chestLeke: 'Thesar! +10 lekë',
     spring: 'Mbaj A për kërcim më të lartë', gateLocked: n => `Porta hapet vetëm me 3 ${tk().pl} · ${n}/3`, livesLeft: n => `Orik ×${n}`,
-    bossIn: 'KUÇEDRA! Kërce mbi kokat e saj ose hidhi ullinj.', bossDown: 'Kuçedra u mund! Liro shqiponjën.', gateOpen: 'Të 3 pendët! Porta e Rozafës u hap!',
+    bossIn: k => `KUÇEDRA! Kërce mbi kokat e saj ose hidhi ${POW_T.sq[k].pl}.`, bossDown: 'Kuçedra u mund! Liro shqiponjën.', gateOpen: 'Të 3 pendët! Porta e Rozafës u hap!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Mbaroi koha!', cp: 'Pikë kontrolli',
     needF: n => `Të duhen 3 ${tk().pl} · ke ${n}/3`, flag: n => `Flamuri u arrit! +${n} lekë`, cpMissed: 'Të ka mbetur një pendë prapa! Pika e kontrollit nuk u ruajt.',
-    popLife: '+1 JETË', popOlive: 'ULLI!', popByrek: 'BYREK!',
+    popLife: '+1 JETË', popPow: k => POW_T.sq[k].pop, popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'ORTEKU! ', hudFree: 'LIRO SHQIPONJËN', hudFlag: 'KAP FLAMURIN', hudTemple: 'TEMPULLI ▸', bossFled: 'Kuçedra iku drejt jugut! Tani kap flamurin.', elephantHint: 'Kërce mbi elefantin, ai të hedh mbi mur!', bossDown2: 'Kuçedra u mund! Tani kap flamurin.', hudCastle: 'KALAJA ▸',
     lvLabel: i => `NIVELI ${i}`, locked: 'I kyçur', tag: 'Shpëto shqiponjën <span>· një aventurë shqiptare</span>', play: 'Luaj', other: 'English', best: n => `Rekordi: ${n} pikë`,
     help: '<b>Prekje</b> gishti i majtë lëviz, A kërcen, B vrapon dhe hedh ullinj.<br><b>Tastiera</b> shigjetat, Space kërcim, X vrap, P pushim. <b>Kontrolluesi</b> leva, A kërcim, X vrap.',
@@ -631,14 +659,14 @@ const I18N = {
     }
   },
   en: {
-    canvas: 'Orik game screen', padB: 'run · olive', padA: 'jump', mute: 'Sound', pauseBtn: 'Pause',
+    canvas: 'Orik game screen', padB: k => `run\n${POW_T.en[k].pad}`, padA: 'jump', mute: 'Sound', pauseBtn: 'Pause',
     rotT: 'Rotate your phone', rotH: 'Orik runs sideways. Turn your phone to landscape.', fs: 'Fullscreen', fsNo: 'Fullscreen isn\'t allowed here',
     life50: '50 lekë · +1 life', secret: (m, f, n) => `${m} · secrets ${f}/${n}`, hidBlock: 'Hidden block!', hidCoins: '+5 hidden lekë!', chestLife: 'Treasure! +1 life', chestLeke: 'Treasure! +10 lekë',
     spring: 'Hold A to bounce higher', gateLocked: n => `Only 3 ${tk().pl} open this gate · ${n}/3`, livesLeft: n => `Orik ×${n}`,
-    bossIn: 'KUÇEDRA! Stomp on her heads or throw olives.', bossDown: 'Kuçedra is beaten! Free the eagle.', gateOpen: 'All 3 feathers! The gate of Rozafa is open!',
+    bossIn: k => `KUÇEDRA! Stomp on her heads or throw ${POW_T.en[k].pl}.`, bossDown: 'Kuçedra is beaten! Free the eagle.', gateOpen: 'All 3 feathers! The gate of Rozafa is open!',
     feather: n => `${tk().one} · ${n}/3`, allFeathers: () => tk().all, timeUp: 'Time\'s up!', cp: 'Checkpoint',
     needF: n => `You need 3 ${tk().pl} · you have ${n}/3`, flag: n => `Flag reached! +${n} lekë`, cpMissed: 'You left a feather behind! Checkpoint not saved.',
-    popLife: '+1 LIFE', popOlive: 'OLIVE!', popByrek: 'BYREK!',
+    popLife: '+1 LIFE', popPow: k => POW_T.en[k].pop, popByrek: 'BYREK!',
     hudF: n => `${tk().hud} ${n}/3`, hudAval: 'AVALANCHE! ', hudFree: 'FREE THE EAGLE', hudFlag: 'REACH THE FLAG', hudTemple: 'TEMPLE ▸', bossFled: 'Kuçedra fled south! Now reach the flag.', elephantHint: 'Jump on the elephant and it will toss you over the wall!', bossDown2: 'Kuçedra is beaten! Now reach the flag.', hudCastle: 'CASTLE ▸',
     lvLabel: i => `LEVEL ${i}`, locked: 'Locked', tag: 'Save the eagle <span>· an Albanian adventure</span>', play: 'Play', other: 'Shqip', best: n => `Best: ${n} points`,
     help: '<b>Touch</b> left thumb moves, A jumps, B runs and throws olives.<br><b>Keyboard</b> arrows, Space jump, X run, P pause. <b>Controller</b> stick, A jump, X run.',
@@ -1072,6 +1100,7 @@ function bumpBlock(tx, ty) {
 }
 function spawnItem(kind, tx, ty) {
   if (kind === 'byrek' && L.snack) kind = L.snack;
+  if (kind === 'olive' && L.pow) kind = L.pow;
   const h = ITEM_SPR[kind].height, w = 14;
   items.push({ kind, x: tx * 16 + 1, y: ty * 16 + 16 - h, w, h, vx: 0, vy: 0, emerge: 32 });
 }
@@ -1164,6 +1193,7 @@ function updEnemy(e) {
     else return;
   }
   e.t++;
+  e.py = e.y;
   if (e.state === 'flat') { if (e.t > 30) e.dead = true; return; }
   if (e.state === 'flip') { e.vy += 0.3; e.y += e.vy; e.x += e.vx; if (e.y > VH + 40) e.dead = true; return; }
   if (e.type === 'fish') {
@@ -1180,7 +1210,10 @@ function updEnemy(e) {
   else { e.vy = Math.min(e.vy + 0.4, 5); const pv = e.vx; moveBody(e); if (e.hitWall) e.vx = -pv; e.face = e.vx < 0 ? -1 : 1; if (e.y > VH + 32) e.dead = true; }
   const p = player;
   if (p.dead || e.state !== 'live' || !overlap(p, e)) return;
-  const fromAbove = p.vy > 0 && (p.y + p.h - p.vy) <= e.y + 5;
+  // A fish that leaps into Orik's feet counts as a stomp, even if he is standing on a raft or still rising
+  const fromAbove = e.type === 'fish'
+    ? (p.y + p.h - Math.max(p.vy, 0)) <= Math.max(e.y, e.py == null ? e.y : e.py) + 8
+    : p.vy > 0 && (p.y + p.h - p.vy) <= e.y + 5;
   if (e.type !== 'hedgehog' && fromAbove) {
     if (e.type === 'crow' || e.type === 'ball' || e.type === 'fish') { e.state = 'flip'; e.vy = 0; } else { e.state = 'flat'; e.t = 0; }
     p.vy = input.a ? -5.4 : -3.8; sfx('stomp'); addPop(e.x, e.y - 4, '100'); addScore(100); mission.kills++;
@@ -1188,10 +1221,10 @@ function updEnemy(e) {
 }
 function updItems() {
   for (const it of items) {
-    if (it.emerge > 0) { it.emerge--; it.y -= 0.5; if (it.emerge === 0 && it.kind !== 'olive') it.vx = it.kind === 'plis' ? 1.2 : 1; continue; }
-    if (it.kind !== 'olive' || it.vy !== 0) { it.vy = Math.min(it.vy + 0.4, 5); const pv = it.vx; moveBody(it); if (it.hitWall) it.vx = -pv; }
+    if (it.emerge > 0) { it.emerge--; it.y -= 0.5; if (it.emerge === 0 && !POWS[it.kind]) it.vx = it.kind === 'plis' ? 1.2 : 1; continue; }
+    if (!POWS[it.kind] || it.vy !== 0) { it.vy = Math.min(it.vy + 0.4, 5); const pv = it.vx; moveBody(it); if (it.hitWall) it.vx = -pv; }
     if (it.y > VH + 20) it.dead = true;
-    if (!player.dead && overlap(player, it)) { it.dead = true; addScore(500); if (it.kind === 'plis') { lives++; sfx('one'); addPop(it.x, it.y, say('popLife')); } else { grow(it.kind === 'olive' ? 'olive' : null); addPop(it.x, it.y, it.kind === 'olive' ? say('popOlive') : (ITEM_POP[it.kind] || say('popByrek'))); } }
+    if (!player.dead && overlap(player, it)) { it.dead = true; addScore(500); if (it.kind === 'plis') { lives++; sfx('one'); addPop(it.x, it.y, say('popLife')); } else { grow(POWS[it.kind] ? 'olive' : null); addPop(it.x, it.y, POWS[it.kind] ? say('popPow', it.kind) : (ITEM_POP[it.kind] || say('popByrek'))); } }
   }
   items = items.filter(i => !i.dead);
 }
@@ -1216,7 +1249,7 @@ function updFires() {
 function spawnBoss() {
   const a = L.arena;
   boss = { x: (a.x0 + 10) * 16, y: 10 * 16 - 38, w: 44, h: 38, vx: -0.8, vy: 0, hp: L.bossHp || 9, inv: 0, t: 0, face: -1, dying: false, act: 0, fireQ: 0, fireN: 0 };
-  toast(say('bossIn'), 2600); playMusic('boss');
+  toast(say('bossIn', powKey()), 2600); playMusic('boss');
 }
 function hitBoss(n) {
   const b = boss; if (!b || b.dying) return;
@@ -1372,13 +1405,14 @@ function updateWorld() {
   updCam();
 }
 function startClear() {
+  shots = []; fires = [];
   const p = player, h = clamp((140 - p.y) / 112, 0, 1);
-  const bonus = h >= 0.9 ? 20 : h >= 0.7 ? 10 : h >= 0.45 ? 5 : h >= 0.2 ? 3 : 1;
+  const bonus = h >= 0.9 ? 10 : h >= 0.7 ? 5 : h >= 0.45 ? 3 : h >= 0.2 ? 2 : 1;
   st = 'clear'; stT = 0; stopMusic(); sfx('clear'); addScore(1000 + (L.def.kind === 'timer' ? Math.round(L.timeLeft) * 20 : 0));
-  toast(say('flag', bonus), 1800);
   addPop(L.goal.x - 14, p.y - 6, `+${bonus} LEKË`);
   for (let k = 0; k < Math.min(bonus, 8); k++) addPart('coin', L.goal.x + 2, p.y, (k - 3.5) * 0.5, -3.5 - (k % 3) * 0.4, 30);
-  addLeke(bonus);
+  const livesBefore = lives; addLeke(bonus);
+  toast(say('flag', bonus) + (lives > livesBefore ? ' · ' + say('popLife') : ''), 2200);
   p.vx = 0; p.vy = 0; p.inv = 0; p.x = L.goal.x + 7 - p.w;
 }
 function updClear() {
@@ -1390,6 +1424,7 @@ function updClear() {
   if (stT > 170) levelComplete();
 }
 function startFreeing() {
+  shots = [];
   carry = { size: player.size, power: player.power }; st = 'freeing'; stT = 0; L.freed = true; L.eagleY = L.cage.y + 6; stopMusic(); sfx('win');
 }
 function updFreeing() {
@@ -1709,10 +1744,11 @@ function drawGoal() {
 function drawCPs() {
   for (const c of L.cps) {
     const x = sx(c.x + 8); if (x < -20 || x > VW + 20) continue;
-    ctx.fillStyle = '#d9d4c8'; ctx.fillRect(x, 136, 1, 24);
-    if (c.on && drawNatFlag(x + 1, 137, 9, 6, L.flag, false)) continue;
-    ctx.fillStyle = c.on ? '#d7263d' : '#8a8580'; ctx.fillRect(x + 1, 137, 9, 6);
-    if (c.on) { ctx.fillStyle = '#1a1418'; ctx.fillRect(x + 4, 139, 3, 2); }
+    const gy = c.gy || (c.gy = groundYAt(c.x + 4, 8));
+    ctx.fillStyle = '#d9d4c8'; ctx.fillRect(x, gy - 24, 1, 24);
+    if (c.on && drawNatFlag(x + 1, gy - 23, 9, 6, L.flag, false)) continue;
+    ctx.fillStyle = c.on ? '#d7263d' : '#8a8580'; ctx.fillRect(x + 1, gy - 23, 9, 6);
+    if (c.on) { ctx.fillStyle = '#1a1418'; ctx.fillRect(x + 4, gy - 21, 3, 2); }
   }
 }
 function drawCage() {
@@ -1785,7 +1821,7 @@ function drawEnts() {
     ctx.restore();
   }
   for (const f of fires) ctx.drawImage(FIRE[(frame >> 2) % 2], sx(f.x), Math.round(f.y));
-  for (const s of shots) ctx.drawImage(SHOT, sx(s.x), Math.round(s.y));
+  for (const s of shots) ctx.drawImage(SHOT_SPR[L.pow || 'olive'], sx(s.x), Math.round(s.y));
 }
 function drawPlayer() {
   const p = player; if (!p) return;
@@ -1928,7 +1964,7 @@ function startLevel(i, noStory) {
   on('bGo', beginPlay);
 }
 function beginPlay() {
-  hideScreen(); st = 'play'; setHud(true); showPad(); playMusic(THEMES[L.theme].music); requestWake();
+  hideScreen(); st = 'play'; setHud(true); showPad(); $('sPadB').textContent = say('padB', powKey()); playMusic(THEMES[L.theme].music); requestWake();
 }
 function pause() {
   if (st !== 'play') return;
@@ -2025,7 +2061,7 @@ window.claude?.hot?.snapshot?.(() => ({ unlocked: save.unlocked }));
 function applyLang() {
   document.documentElement.lang = LANG;
   $('game').setAttribute('aria-label', say('canvas'));
-  $('sPadB').textContent = say('padB'); $('sPadA').textContent = say('padA');
+  $('sPadB').textContent = say('padB', powKey()); $('sPadA').textContent = say('padA');
   $('bMute').setAttribute('aria-label', say('mute')); $('bPause').setAttribute('aria-label', say('pauseBtn'));
   $('sRotT').textContent = say('rotT'); $('sRotH').textContent = say('rotH'); $('bFsR').textContent = say('fs');
   for (const k in hudCache) delete hudCache[k];
