@@ -697,13 +697,12 @@ const THETH_INTRO = [
   { art: 'zana', text: 'Kur Oriku arriti në Theth, këmbët i ishin bërë plumb. Nga pas një shkëmbi doli Zana e Malit, e bardhë si bora e bjeshkës. I dha tri pika qumësht dhe i tha: «Tri pika qumësht mali të bëjnë të shpejtë si era, por s\'zgjasin shumë. Vrapo, bir, para se të të zërë orteku!»' }
 ];
 const STORY_END = [
-  { art: 'eagle', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. U ngrit mbi Shkodër dhe i tha Orikut: «Ti e mbajte besën, bir. Kjo nuk harrohet kurrë.»' },
-  { art: 'byrek', text: 'Shqiponja u ul sërish në mes të flamurit, në Vlorë. Oriku u kthye në shtëpi me xhepat plot lekë. Nëna e priste me një tavë byrek, dhe këtë herë Oriku hëngri tre copë.' },
-  { art: 'kucedra', text: 'FUND. Ose ndoshta jo: thellë në liqenin e Shkodrës, diçka hapi sytë.' }
+  { art: 'eagle', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. «Ti e mbajte besën, Orik,» i tha, dhe fluturoi drejt Vlorës, për t\'u ulur sërish në mes të flamurit.' },
+  { art: 'kucedra', text: 'Por Oriku nuk u kthye me të. Nga bregu i liqenit, ai vuri re se uji po ziente.' }
 ];
 const HELSINKI_INTRO = [
   { art: 'kucedra', text: 'Kuçedra nuk kishte vdekur. Një natë doli nga liqeni i Shkodrës, me krahë të djegur e me zemër plot inat, dhe fluturoi në veri, aq larg sa atje dielli fle gjysmë viti. U ul në Helsinki, mbi detin e ngrirë, dhe nisi të gëlltiste dritat e veriut, njërën pas tjetrës.' },
-  { art: 'aurora', text: 'Shqiponja ia solli lajmin Orikut. Nëna i mbështolli qafën me një shall të leshtë dhe i tha: «Besa nuk mbaron te pragu i shtëpisë, bir. Shko.» Thonë se kush mbledh tri copëza nga drita e grabitur, e ndez sërish qiellin e veriut.' }
+  { art: 'aurora', text: 'Oriku nuk priti. Besën ia kishte dhënë nënës, dhe besa nuk mbahet përgjysmë. Me një shall të leshtë në qafë, u nis drejt veriut. Thonë se kush mbledh tri copëza nga drita e grabitur, e ndez sërish qiellin e veriut.' }
 ];
 const BANGKOK_INTRO = [
   { art: 'kucedra', text: 'E mundur mbi akull dhe pa dritat e veriut, Kuçedra po ngrinte nga të ftohtit. Iku drejt jugut, në vapë, deri në Bangkok, qytetin e tempujve të artë dhe të lumit Chao Phraya. Atje u fsheh në Tempullin e Agimit dhe e mbylli portën me tri lotuse të shenjta.' },
@@ -716,7 +715,7 @@ const BONUS_END = [
 const STORY_EN = {
   helsinki: [
     { art: 'kucedra', text: 'Kuçedra was not dead. One night she crawled out of Lake Shkodër, wings scorched and heart full of spite, and flew north, so far north that the sun sleeps half the year. She landed in Helsinki, on the frozen sea, and began swallowing the northern lights one by one.' },
-    { art: 'aurora', text: 'The eagle brought the news to Orik. His mother wrapped a woollen scarf around his neck and said: “A besa doesn\'t end at the doorstep, my son. Go.” They say whoever gathers three shards of the stolen light will set the northern sky ablaze again.' }
+    { art: 'aurora', text: 'Orik didn\'t wait. He had given his mother his besa, and a besa is never kept halfway. With a woollen scarf around his neck, he set off north. They say whoever gathers three shards of the stolen light will set the northern sky ablaze again.' }
   ],
   bangkok: [
     { art: 'kucedra', text: 'Beaten on the ice and robbed of the northern lights, Kuçedra was freezing. She fled south, into the heat, all the way to Bangkok, city of golden temples and the Chao Phraya river. There she hid in the Temple of Dawn and sealed its gate with three sacred lotuses.' },
@@ -735,9 +734,8 @@ const STORY_EN = {
     { art: 'zana', text: 'When Orik reached Theth, his legs felt heavy as lead. From behind a rock appeared the Zana of the Mountain, white as the highland snow. She gave him three drops of milk and said: “Three drops of mountain milk will make you swift as the wind, but not for long. Run, my son, before the avalanche catches you!”' }
   ],
   end: [
-    { art: 'eagle', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. She rose over Shkodër and said to Orik: “You kept your besa, my son. That is never forgotten.”' },
-    { art: 'byrek', text: 'The eagle settled back in the middle of the flag in Vlorë. Orik came home with his pockets full of lekë. His mother was waiting with a tray of byrek, and this time Orik ate three pieces.' },
-    { art: 'kucedra', text: 'THE END. Or maybe not: deep in Lake Shkodër, something opened its eyes.' }
+    { art: 'eagle', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. “You kept your besa, Orik,” she said, and flew off to Vlorë to settle once more in the middle of the flag.' },
+    { art: 'kucedra', text: 'But Orik did not go with her. From the shore, he noticed that the water of the lake was boiling.' }
   ]
 };
 const storyStart = () => LANG === 'en' ? STORY_EN.start : STORY_START;
