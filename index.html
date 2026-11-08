@@ -575,8 +575,8 @@ function lvTheth() {
   b.e('beetle', 120).e('beetle', 124).e('hedgehog', 132).row(140, 6, 'H').e('crow', 144, 4).plat(151, 8, 'x', 2, 1.0);
   b.block(158, 8, 158, 9).row(160, 6, 'SSSSSSSSSS').e('beetle', 163).e('beetle', 167).chest(165, 5);
   b.row(180, 7, 'CC').row(183, 5, 'CCC').feather(185, 4).e('hedgehog', 192).e('crow', 210, 4).arc(214, 7, 5).goal(232);
-  b.L.aval = { speed: 1.05 };
-  b.L.rush = 1.4; // Zana's milk: the whole level runs 1.4× faster
+  b.L.aval = { speed: 1.3 };
+  b.L.rush = 1.4; // Zana's milk: Orik runs 1.4× faster (falling, jumps, olives and enemies stay normal)
   return b.L;
 }
 function lvRozafa() {
@@ -761,12 +761,10 @@ const THETH_INTRO = [
   { art: 'zana', text: 'Kur Oriku arriti në Theth, këmbët i ishin bërë plumb. Nga pas një shkëmbi doli Zana e Malit, e bardhë si bora e bjeshkës. I dha tri pika qumësht dhe i tha: «Tri pika qumësht mali të bëjnë të shpejtë si era, por s\'zgjasin shumë. Vrapo, bir, para se të të zërë orteku!»' }
 ];
 const STORY_END = [
-  { art: 'eagle', text: 'Kuçedra ra në humnerën nën kala, kafazi u thye dhe shqiponja u lirua. «Ti e mbajte besën, Orik,» i tha, dhe fluturoi drejt Vlorës, për t\'u ulur sërish në mes të flamurit.' },
-  { art: 'kucedra', text: 'Por Oriku nuk u kthye me të. Nga bregu i liqenit, ai vuri re se uji po ziente.' }
+  { art: 'eagle', text: '«Ti e mbajte besën, Orik,» tha shqiponja e lirë, dhe fluturoi drejt Vlorës. Por Oriku mbeti në breg: uji i liqenit po ziente.' }
 ];
 const HELSINKI_INTRO = [
-  { art: 'kucedra', text: 'Kuçedra nuk kishte vdekur. Një natë doli nga liqeni i Shkodrës, me krahë të djegur e me zemër plot inat, dhe fluturoi në veri, aq larg sa atje dielli fle gjysmë viti. U ul në Helsinki, mbi detin e ngrirë, dhe nisi të gëlltiste dritat e veriut, njërën pas tjetrës.' },
-  { art: 'aurora', text: 'Oriku nuk priti. Besën ia kishte dhënë nënës, dhe besa nuk mbahet përgjysmë. Me një shall të leshtë në qafë, u nis drejt veriut. Thonë se kush mbledh tri copëza nga drita e grabitur, e ndez sërish qiellin e veriut.' }
+  { art: 'aurora', text: 'Kuçedra nuk kishte vdekur. Doli nga liqeni dhe fluturoi në veri, deri në Helsinki, ku nisi të gëlltiste dritat e veriut. Oriku hodhi një shall leshi në qafë dhe u nis pas saj.' }
 ];
 const BANGKOK_INTRO = [
   { art: 'kucedra', text: 'E mundur mbi akull dhe pa dritat e veriut, Kuçedra po ngrinte nga të ftohtit. Iku drejt jugut, në vapë, deri në Bangkok, qytetin e tempujve të artë dhe të lumit Chao Phraya. Atje u fsheh në Tempullin e Agimit dhe e mbylli portën me tri lotuse të shenjta.' },
@@ -778,8 +776,7 @@ const BONUS_END = [
 ];
 const STORY_EN = {
   helsinki: [
-    { art: 'kucedra', text: 'Kuçedra was not dead. One night she crawled out of Lake Shkodër, wings scorched and heart full of spite, and flew north, so far north that the sun sleeps half the year. She landed in Helsinki, on the frozen sea, and began swallowing the northern lights one by one.' },
-    { art: 'aurora', text: 'Orik didn\'t wait. He had given his mother his besa, and a besa is never kept halfway. With a woollen scarf around his neck, he set off north. They say whoever gathers three shards of the stolen light will set the northern sky ablaze again.' }
+    { art: 'aurora', text: 'Kuçedra was not dead. She crawled out of the lake and flew north, all the way to Helsinki, where she began swallowing the northern lights. Orik threw a woollen scarf around his neck and went after her.' }
   ],
   bangkok: [
     { art: 'kucedra', text: 'Beaten on the ice and robbed of the northern lights, Kuçedra was freezing. She fled south, into the heat, all the way to Bangkok, city of golden temples and the Chao Phraya river. There she hid in the Temple of Dawn and sealed its gate with three sacred lotuses.' },
@@ -798,8 +795,7 @@ const STORY_EN = {
     { art: 'zana', text: 'When Orik reached Theth, his legs felt heavy as lead. From behind a rock appeared the Zana of the Mountain, white as the highland snow. She gave him three drops of milk and said: “Three drops of mountain milk will make you swift as the wind, but not for long. Run, my son, before the avalanche catches you!”' }
   ],
   end: [
-    { art: 'eagle', text: 'The Kuçedra fell into the abyss beneath the castle, the cage broke and the eagle was free. “You kept your besa, Orik,” she said, and flew off to Vlorë to settle once more in the middle of the flag.' },
-    { art: 'kucedra', text: 'But Orik did not go with her. From the shore, he noticed that the water of the lake was boiling.' }
+    { art: 'eagle', text: '“You kept your besa, Orik,” said the freed eagle, and flew home to Vlorë. But Orik stayed on the shore: the lake was boiling.' }
   ]
 };
 const storyStart = () => LANG === 'en' ? STORY_EN.start : STORY_START;
@@ -1165,6 +1161,9 @@ function toast(msg, ms) {
 }
 function addPart(k, x, y, vx, vy, life) { parts.push({ k, x, y, vx, vy, t: 0, life }); }
 function addPop(x, y, txt) { pops.push({ x, y, txt, t: 0 }); }
+// Name of what Orik just ate: rises from his head, rides above him for 2 s, then fades. Only one at a time.
+const TAG_RISE = 30, TAG_HOLD = 120, TAG_FADE = 20;
+function addTag(txt) { const p = player; pops = pops.filter(t => !t.follow); pops.push({ follow: true, txt, t: 0, cx: p.x + p.w / 2, cy: p.y + 2 }); }
 function sparkle(x, y, n, k) { for (let i = 0; i < (n || 8); i++) { const a = Math.random() * Math.PI * 2, s = 0.6 + Math.random() * 1.4; addPart(k || 'spark', x, y, Math.cos(a) * s, Math.sin(a) * s - 0.5, 24 + Math.random() * 16); } }
 function addScore(n) { score += n; levelScore += n; }
 function addLeke(n) {
@@ -1225,14 +1224,15 @@ function updPlayer() {
   }
   const dir = (input.right ? 1 : 0) - (input.left ? 1 : 0);
   const ice = L.ice && p.onGround; // Helsinki: frozen sea, slippery footing
-  const max = input.b ? 2.5 : 1.5, target = dir * max, acc = p.onGround ? (ice ? 0.045 : 0.09) : 0.07;
-  if (dir === 0) { const fr = p.onGround ? (ice ? 0.02 : 0.1) : 0.03; p.vx = p.vx > 0 ? Math.max(0, p.vx - fr) : Math.min(0, p.vx + fr); }
+  const sp = L.rush || 1; // Theth: Zana's milk speeds up Orik's legs only
+  const max = (input.b ? 2.5 : 1.5) * sp, target = dir * max, acc = (p.onGround ? (ice ? 0.045 : 0.09) : 0.07) * sp;
+  if (dir === 0) { const fr = (p.onGround ? (ice ? 0.02 : 0.1) : 0.03) * sp; p.vx = p.vx > 0 ? Math.max(0, p.vx - fr) : Math.min(0, p.vx + fr); }
   else if (p.vx < target) p.vx = Math.min(target, p.vx + acc * (p.vx < 0 ? 2.2 : 1));
   else if (p.vx > target) p.vx = Math.max(target, p.vx - acc * (p.vx > 0 ? 2.2 : 1));
   if (dir) p.face = dir;
   p.coyote = p.onGround ? 6 : Math.max(0, p.coyote - 1);
   p.jb = input.aP ? 7 : Math.max(0, p.jb - 1);
-  if (p.jb > 0 && p.coyote > 0) { p.vy = -(5.0 + Math.abs(p.vx) * 0.26); p.jb = 0; p.coyote = 0; sfx('jump'); }
+  if (p.jb > 0 && p.coyote > 0) { p.vy = -(5.0 + Math.min(Math.abs(p.vx), 2.5) * 0.26); p.jb = 0; p.coyote = 0; sfx('jump'); }
   p.vy = Math.min(p.vy + ((p.vy < 0 && input.a) ? 0.22 : 0.55), 5.5);
   if (p.plat) { p.x += p.plat.dx; p.y += p.plat.dy; }
   const prevBottom = p.y + p.h;
@@ -1318,7 +1318,7 @@ function updItems() {
     if (it.emerge > 0) { it.emerge--; it.y -= 0.5; if (it.emerge === 0 && !POWS[it.kind]) it.vx = it.kind === 'plis' ? 1.2 : 1; continue; }
     if (!POWS[it.kind] || it.vy !== 0) { it.vy = Math.min(it.vy + 0.4, 5); const pv = it.vx; moveBody(it); if (it.hitWall) it.vx = -pv; }
     if (it.y > VH + 20) it.dead = true;
-    if (!player.dead && overlap(player, it)) { it.dead = true; addScore(500); if (it.kind === 'plis') { lives++; sfx('one'); addPop(it.x, it.y, say('popLife')); } else { grow(POWS[it.kind] ? 'olive' : null); addPop(it.x, it.y, POWS[it.kind] ? say('popPow', it.kind) : (ITEM_POP[it.kind] || say('popByrek'))); } }
+    if (!player.dead && overlap(player, it)) { it.dead = true; addScore(500); if (it.kind === 'plis') { lives++; sfx('one'); addPop(it.x, it.y, say('popLife')); } else { grow(POWS[it.kind] ? 'olive' : null); addTag(POWS[it.kind] ? say('popPow', it.kind) : (ITEM_POP[it.kind] || say('popByrek'))); } }
   }
   items = items.filter(i => !i.dead);
 }
@@ -1401,8 +1401,13 @@ function updCam() {
 function updParts() {
   for (const q of parts) { q.t++; q.x += q.vx; q.y += q.vy; if (q.k === 'brick' || q.k === 'coin') q.vy += 0.3; if (q.k === 'heart') q.vy *= 0.97; if (q.k === 'coin' && q.t === q.life - 1) addPop(q.x, q.y, '+1'); }
   parts = parts.filter(q => q.t < q.life);
-  for (const t of pops) { t.t++; t.y -= 0.5; }
-  pops = pops.filter(t => t.t < 40);
+  for (const t of pops) {
+    t.t++;
+    if (!t.follow) { t.y -= 0.5; continue; }
+    const p = player, k = Math.min(t.t, TAG_RISE) / TAG_RISE, lift = 20 * (1 - (1 - k) * (1 - k));
+    t.cx += (p.x + p.w / 2 - t.cx) * 0.35; t.cy += (p.y + 2 - lift - t.cy) * 0.35;
+  }
+  pops = pops.filter(t => t.t < (t.follow ? TAG_RISE + TAG_HOLD + TAG_FADE : 40));
   for (const [k, v] of bumps) { if (v <= 1) bumps.delete(k); else bumps.set(k, v - 1); }
 }
 function updPlats() {
@@ -1985,7 +1990,15 @@ function drawParts() {
     else { ctx.fillStyle = q.t % 6 < 3 ? '#fff6c8' : '#f5c542'; ctx.fillRect(x, y, 2, 2); }
   }
   ctx.font = '8px "Press Start 2P", monospace'; ctx.textBaseline = 'top';
-  for (const t of pops) { const x = sx(t.x), y = Math.round(t.y); ctx.fillStyle = '#000'; ctx.fillText(t.txt, x + 1, y + 1); ctx.fillStyle = '#fff6c8'; ctx.fillText(t.txt, x, y); }
+  for (const t of pops) {
+    if (t.follow) {
+      const end = TAG_RISE + TAG_HOLD, a = t.t > end ? Math.max(0, 1 - (t.t - end) / TAG_FADE) : 1, m = ctx.measureText && ctx.measureText(t.txt), w = Math.round((m && m.width) || t.txt.length * 8);
+      const x = clamp(Math.round(sx(t.cx) - w / 2), 2, VW - w - 2), y = Math.max(20, Math.round(t.cy - 8));
+      ctx.globalAlpha = a; ctx.fillStyle = '#000'; ctx.fillText(t.txt, x + 1, y + 1); ctx.fillStyle = '#f5c542'; ctx.fillText(t.txt, x, y); ctx.globalAlpha = 1;
+      continue;
+    }
+    const x = sx(t.x), y = Math.round(t.y); ctx.fillStyle = '#000'; ctx.fillText(t.txt, x + 1, y + 1); ctx.fillStyle = '#fff6c8'; ctx.fillText(t.txt, x, y);
+  }
 }
 function drawAval() {
   if (!aval) return;
@@ -2193,9 +2206,7 @@ function loop(ts) {
   requestAnimationFrame(loop);
   if (!last) last = ts;
   let dt = (ts - last) / 1000; last = ts; if (dt > 0.25) dt = 0.25;
-  // Theth rush: Zana's milk runs the whole level (Orik, enemies, avalanche) 1.25× faster
-  const rush = (L && L.rush && (st === 'play' || st === 'clear')) ? L.rush : 1;
-  accum += dt * rush; let n = 0;
+  accum += dt; let n = 0;
   while (accum >= 1 / 60 && n < 6) { tick(); accum -= 1 / 60; n++; }
   render();
 }
