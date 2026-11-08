@@ -89,6 +89,12 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-bo
 .lvb b{font-family:var(--font-display);font-size:12px;font-weight:900;color:var(--gold);letter-spacing:.04em}
 .lvb[disabled]{opacity:.45;cursor:not-allowed}
 .lvb:not([disabled]):hover{border-color:var(--gold)}
+.lv.tight{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.lv.tight .lvb{font-size:14px;padding:6px 8px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mode{font-family:var(--font-display);font-size:13px;font-weight:900;letter-spacing:.04em;color:var(--paper);background:transparent;border:2px solid #5a4a50;padding:7px 8px;cursor:pointer}
+.mode.on{background:var(--gold);color:var(--ink);border-color:#000;box-shadow:2px 2px 0 #000}
+.mode.hard.on{background:var(--flag);color:var(--paper)}
 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .title .row{justify-content:flex-start}
 .btn{font-family:var(--font-display);font-size:16px;font-weight:900;line-height:1.3;color:var(--ink);background:var(--gold);border:3px solid #000;box-shadow:3px 3px 0 #000;padding:10px 14px;cursor:pointer}
@@ -361,6 +367,7 @@ const THEMES = {
   berat:   { sky:['#f08a4b','#fde2c0'], ground:'#8f8373', groundTop:'#6aa84f', groundDark:'#62584b', brick:'#b35c3b', brickLine:'#5e2e1c', stone:'#e8e0d2', stoneLight:'#fbf7ef', stoneDark:'#a79c8a', plat:'#7a4a2c', music:'iso' },
   gjiro:   { sky:['#94bfdc','#f1eadb'], ground:'#8b8a84', groundTop:'#b2b0a7', groundDark:'#5d5c57', brick:'#86807a', brickLine:'#3d3a36', stone:'#b1aca2', stoneLight:'#d6d1c7', stoneDark:'#6d6961', plat:'#5d5c57', music:'iso2' },
   butrint: { sky:['#f2b36b','#fdf0d6'], ground:'#b9a47c', groundTop:'#7aa04f', groundDark:'#877650', brick:'#b98a5a', brickLine:'#5e4630', stone:'#d6c8a8', stoneLight:'#efe5cf', stoneDark:'#998b6d', plat:'#8b5a3c', music:'mystic' },
+  pogradec:{ sky:['#6fa8d6','#f7e4cc'], ground:'#a39478', groundTop:'#76a650', groundDark:'#74684f', brick:'#9a6a42', brickLine:'#4e321c', stone:'#cfc6b4', stoneLight:'#ece5d6', stoneDark:'#938a77', plat:'#e9e4d6', music:'lake' },
   kruje:   { sky:['#6d9ec9','#e7eef3'], ground:'#7b715f', groundTop:'#5f8a3e', groundDark:'#4e4739', brick:'#9b6a4b', brickLine:'#4a3121', stone:'#a79f90', stoneLight:'#cbc3b4', stoneDark:'#6a6356', plat:'#6a6356', music:'heroic' },
   theth:   { sky:['#86b2dc','#eef6ff'], ground:'#666b73', groundTop:'#f4f8ff', groundDark:'#3f4248', brick:'#7b8794', brickLine:'#353c45', stone:'#9098a3', stoneLight:'#c3cad3', stoneDark:'#565d66', plat:'#5e3a24', music:'north' },
   rozafa:  { sky:['#1b1430','#74354f'], ground:'#57504a', groundTop:'#7c7268', groundDark:'#2e2925', brick:'#6e6259', brickLine:'#2a2420', stone:'#7d756c', stoneLight:'#a39a8f', stoneDark:'#443e38', plat:'#443e38', music:'dark' },
@@ -427,6 +434,7 @@ function mkB(w, theme) {
         berat: () => b.block(x - 7, 8, x - 5, 9).row(x - 7, 7, 'CCC'),                                          // house with a crumbling roof
         gjiro: () => b.block(x - 7, 8, x - 7, 9).block(x - 5, 6, x - 5, 9),                                     // step and a stone tower
         butrint: () => b.block(x - 8, 8, x - 8, 9).block(x - 6, 7, x - 6, 9).block(x - 4, 9, x - 4, 9),         // broken columns
+        pogradec: () => b.block(x - 8, 9, x - 8, 9).block(x - 7, 8, x - 5, 9).block(x - 6, 6, x - 6, 7),         // lakeside fountain with a lamp
         kruje: () => b.block(x - 7, 7, x - 4, 9).row(x - 7, 6, 'S').row(x - 5, 6, 'S'),                         // crenellated wall
         theth: () => b.block(x - 8, 9, x - 5, 9).block(x - 7, 8, x - 4, 8).block(x - 6, 7, x - 5, 7),           // pile of boulders
         helsinki: () => b.block(x - 8, 8, x - 7, 9).block(x - 5, 6, x - 4, 9),                                  // two ice blocks
@@ -517,6 +525,31 @@ function lvButrint() {
   b.block(262, 2, 263, 7).e('beetle', 266).goal(282);
   return b.L;
 }
+function lvPogradec() {
+  const b = mkB(252, 'pogradec');
+  // Lakeside promenade under the willows
+  b.ground(0, 34);
+  b.arc(5, 7, 5).row(11, 7, 'P').e('beetle', 17).row(20, 6, '?h?').coins(24, 8, 3).e('hedgehog', 27).e('crow', 31, 5);
+  // The old pier: dark planks hold, pale ones crack under your feet; koran trout leap through the gaps
+  b.row(35, 10, 'BBBCCCCBB').row(47, 10, 'CCCCBBCCCCBB').row(62, 10, 'BBCCCBB');
+  b.row(36, 11, 'B').row(42, 11, 'B').row(51, 11, 'B').row(58, 11, 'B').row(62, 11, 'B').row(68, 11, 'B');
+  b.feather(45, 6).fish(45, 100, 0).fish(60, 90, 45).e('crow', 55, 5).coins(53, 7, 4);
+  // Fishermen's beach
+  b.ground(69, 84).cp(71).e('beetle', 75).e('beetle', 78).row(77, 6, '?H?');
+  // Across the lake: boats that drift and bob, a rocky islet in the middle
+  b.plat(86, 9, 'x', 4, 0.6, 4).plat(97, 8, 'y', 3, 0.5, 4).plat(104, 9, 'x', 4, 0.75, 4, 40).plat(121, 8, 'x', 4, 0.7, 4);
+  b.ground(115, 117, 9).feather(116, 5).coins(98, 6, 3).arc(121, 6, 4);
+  b.fish(94, 100, 20).fish(102, 120, 60).fish(113, 90, 0).fish(119, 110, 30).fish(130, 100, 70).e('crow', 110, 4).e('crow', 126, 3);
+  // Drilon: the springs throw you up to the stone terrace
+  b.ground(132, 251).cp(135).e('hedgehog', 140).e('beetle', 145);
+  b.row(149, 9, 'J').row(151, 3, 'SSSSSS').coins(151, 2, 4).chest(156, 2).e('beetle', 154).e('beetle', 157);
+  b.row(161, 6, '?P?').e('hedgehog', 166).e('crow', 168, 4);
+  // Castle hill: climb the slope, then the tower; the feather waits on top
+  b.block(174, 8, 177, 9).block(180, 6, 184, 9).e('beetle', 182, 5).block(186, 8, 186, 9);
+  b.block(188, 3, 190, 9).feather(189, 2).block(191, 5, 195, 9).row(194, 1, 'h').e('crow', 193, 2).e('crow', 199, 4);
+  b.e('beetle', 204).e('hedgehog', 210).row(214, 6, '?').arc(218, 7, 5).e('beetle', 224).goal(236);
+  return b.L;
+}
 function lvKruje() {
   const b = mkB(320, 'kruje');
   b.ground(0, 110).ground(123, 149).ground(161, 319);
@@ -600,31 +633,58 @@ function lvBangkok() {
   return b.L;
 }
 
-const LEVELS = [
-  { name: 'Vlora', en: 'Qyteti i Flamurit', short: 'VLORË', kind: 'timer', time: 150, mission: 'Gjej 3 pendët e shqiponjës dhe arri te flamuri brenda 150 sekondave.', build: lvVlore },
-  { name: 'Durrës', en: 'Dunat, bunkerët dhe amfiteatri', short: 'DURRËS', kind: 'normal', mission: 'Gjej 3 pendët mes dunave, bunkerëve dhe skelës së vjetër.', build: lvDurres },
-  { name: 'Berati', en: 'Qyteti i një mbi një dritareve', short: 'BERAT', kind: 'normal', mission: 'Gjej 3 pendët mbi çatitë. Kujdes: disa gurë shemben nën këmbë.', build: lvBerat },
-  { name: 'Gjirokastra', en: 'Qyteti i gurtë', short: 'GJIRO', kind: 'normal', mission: 'Në këtë qytet nuk ka asnjë lekë. Thjesht gjej 3 pendët dhe ruhu nga topat e kalasë.', build: lvGjiro },
-  { name: 'Butrinti', en: 'Rrënojat e lashta dhe laguna', short: 'BUTRINT', kind: 'normal', mission: 'Gjej 3 pendët mes kolonave dhe trapeve. Peshqit e lagunës kërcejnë lart.', build: lvButrint },
-  { name: 'Kruja', en: 'Kalaja e Skënderbeut', short: 'KRUJË', kind: 'normal', mission: 'Gjej 3 pendët. Gurët bien nga muret dhe topat nuk flenë kurrë.', build: lvKruje },
-  { name: 'Thethi', en: 'Bjeshkët e Nemuna', short: 'THETH', kind: 'avalanche', story: 'theth', mission: 'Po vjen orteku! Qumështi i Zanës të bën të shpejtë si era. Gjej 3 pendët dhe vrapo te flamuri para se të të mbulojë.', build: lvTheth },
-  { name: 'Kalaja e Rozafës', en: 'Shkodër', short: 'ROZAFA', kind: 'boss', mission: 'Vetëm 3 pendët hapin portën. Mund Kuçedrën dhe liro shqiponjën.', build: lvRozafa },
-  { name: 'Helsinki', en: 'Bonus · Qyteti i bardhë i veriut', short: 'HELSINKI', kind: 'boss', story: 'helsinki', mission: 'BONUS. Deti ka ngrirë dhe akulli rrëshqet nën këmbë. Gjej 3 copëzat e dritës polare, përballo Kuçedrën mbi akull dhe arri te flamuri.', build: lvHelsinki },
-  { name: 'Bangkok', en: 'Bonus · Qyteti i engjëjve', short: 'BANGKOK', kind: 'boss', story: 'bangkok', mission: 'BONUS. Gjej 3 lotuset e shenjta që hapin portën e tempullit, mund Kuçedrën dhe arri te flamuri.', build: lvBangkok }
-];
-const NLV = LEVELS.length;
-const LEVELS_EN = [
-  { name: 'Vlora', en: 'City of the Flag', mission: 'Find the eagle\'s 3 feathers and reach the flag within 150 seconds.' },
-  { name: 'Durrës', en: 'Dunes, bunkers and the amphitheatre', mission: 'Find 3 feathers among the dunes, the bunkers and the old pier.' },
-  { name: 'Berat', en: 'City of a Thousand Windows', mission: 'Find 3 feathers on the rooftops. Careful: some stones crumble under your feet.' },
-  { name: 'Gjirokastër', en: 'The Stone City', mission: 'Not a single lek in this town. Find 3 feathers and watch out for the castle cannons.' },
-  { name: 'Butrint', en: 'Ancient ruins and the lagoon', mission: 'Find 3 feathers among the columns and the rafts. The lagoon fish jump high.' },
-  { name: 'Krujë', en: 'Skanderbeg\'s Castle', mission: 'Find 3 feathers. Rocks fall from the walls and the cannons never sleep.' },
-  { name: 'Theth', en: 'The Accursed Mountains', mission: 'Avalanche! The Zana\'s milk makes you swift as the wind. Find 3 feathers and run for the flag before the snow buries you.' },
-  { name: 'Rozafa Castle', en: 'Shkodër', mission: 'Only the 3 feathers can open the gate. Defeat Kuçedra and free the eagle.' },
-  { name: 'Helsinki', en: 'Bonus · The white city of the North', mission: 'BONUS. The sea is frozen and the ice is slippery. Find 3 shards of the northern lights, face Kuçedra on the ice and reach the flag.' },
-  { name: 'Bangkok', en: 'Bonus · City of Angels', mission: 'BONUS. Find the 3 sacred lotuses that open the temple gate, defeat Kuçedra and reach the flag.' }
-];
+// Every level, keyed by id. ROUTES decides which ones each mode plays, and in what order.
+const LV_SQ = {
+  vlore:    { name: 'Vlora', en: 'Qyteti i Flamurit', short: 'VLORË', kind: 'timer', time: 150, mission: 'Gjej 3 pendët e shqiponjës dhe arri te flamuri brenda {t} sekondave.', build: lvVlore },
+  durres:   { name: 'Durrës', en: 'Dunat, bunkerët dhe amfiteatri', short: 'DURRËS', kind: 'normal', mission: 'Gjej 3 pendët mes dunave, bunkerëve dhe skelës së vjetër.', build: lvDurres },
+  berat:    { name: 'Berati', en: 'Qyteti i një mbi një dritareve', short: 'BERAT', kind: 'normal', mission: 'Gjej 3 pendët mbi çatitë. Kujdes: disa gurë shemben nën këmbë.', build: lvBerat },
+  gjiro:    { name: 'Gjirokastra', en: 'Qyteti i gurtë', short: 'GJIRO', kind: 'normal', mission: 'Në këtë qytet nuk ka asnjë lekë. Thjesht gjej 3 pendët dhe ruhu nga topat e kalasë.', build: lvGjiro },
+  butrint:  { name: 'Butrinti', en: 'Rrënojat e lashta dhe laguna', short: 'BUTRINT', kind: 'normal', mission: 'Gjej 3 pendët mes kolonave dhe trapeve. Peshqit e lagunës kërcejnë lart.', build: lvButrint },
+  pogradec: { name: 'Pogradeci', en: 'Liqeni i Ohrit', short: 'POGRADEC', kind: 'normal', mission: 'Gjej 3 pendët në skelën e vjetër, mes varkave dhe lart në kala. Ruhu nga koranët: kërcejnë nga liqeni!', build: lvPogradec },
+  kruje:    { name: 'Kruja', en: 'Kalaja e Skënderbeut', short: 'KRUJË', kind: 'normal', mission: 'Gjej 3 pendët. Gurët bien nga muret dhe topat nuk flenë kurrë.', build: lvKruje },
+  theth:    { name: 'Thethi', en: 'Bjeshkët e Nemuna', short: 'THETH', kind: 'avalanche', story: 'theth', mission: 'Po vjen orteku! Qumështi i Zanës të bën të shpejtë si era. Gjej 3 pendët dhe vrapo te flamuri para se të të mbulojë.', build: lvTheth },
+  rozafa:   { name: 'Kalaja e Rozafës', en: 'Shkodër', short: 'ROZAFA', kind: 'boss', mission: 'Vetëm 3 pendët hapin portën. Mund Kuçedrën dhe liro shqiponjën.', build: lvRozafa },
+  helsinki: { name: 'Helsinki', en: 'Bonus · Qyteti i bardhë i veriut', short: 'HELSINKI', kind: 'boss', bonus: true, story: 'helsinki', mission: 'BONUS. Deti ka ngrirë dhe akulli rrëshqet nën këmbë. Gjej 3 copëzat e dritës polare, përballo Kuçedrën mbi akull dhe arri te flamuri.', build: lvHelsinki },
+  bangkok:  { name: 'Bangkok', en: 'Bonus · Qyteti i engjëjve', short: 'BANGKOK', kind: 'boss', bonus: true, story: 'bangkok', mission: 'BONUS. Gjej 3 lotuset e shenjta që hapin portën e tempullit, mund Kuçedrën dhe arri te flamuri.', build: lvBangkok }
+};
+const LV_EN = {
+  vlore:    { name: 'Vlora', en: 'City of the Flag', mission: 'Find the eagle\'s 3 feathers and reach the flag within {t} seconds.' },
+  durres:   { name: 'Durrës', en: 'Dunes, bunkers and the amphitheatre', mission: 'Find 3 feathers among the dunes, the bunkers and the old pier.' },
+  berat:    { name: 'Berat', en: 'City of a Thousand Windows', mission: 'Find 3 feathers on the rooftops. Careful: some stones crumble under your feet.' },
+  gjiro:    { name: 'Gjirokastër', en: 'The Stone City', mission: 'Not a single lek in this town. Find 3 feathers and watch out for the castle cannons.' },
+  butrint:  { name: 'Butrint', en: 'Ancient ruins and the lagoon', mission: 'Find 3 feathers among the columns and the rafts. The lagoon fish jump high.' },
+  pogradec: { name: 'Pogradec', en: 'Lake Ohrid', mission: 'Find 3 feathers on the old pier, among the boats and up at the castle. Watch out for the koran trout: they leap out of the lake!' },
+  kruje:    { name: 'Krujë', en: 'Skanderbeg\'s Castle', mission: 'Find 3 feathers. Rocks fall from the walls and the cannons never sleep.' },
+  theth:    { name: 'Theth', en: 'The Accursed Mountains', mission: 'Avalanche! The Zana\'s milk makes you swift as the wind. Find 3 feathers and run for the flag before the snow buries you.' },
+  rozafa:   { name: 'Rozafa Castle', en: 'Shkodër', mission: 'Only the 3 feathers can open the gate. Defeat Kuçedra and free the eagle.' },
+  helsinki: { name: 'Helsinki', en: 'Bonus · The white city of the North', mission: 'BONUS. The sea is frozen and the ice is slippery. Find 3 shards of the northern lights, face Kuçedra on the ice and reach the flag.' },
+  bangkok:  { name: 'Bangkok', en: 'Bonus · City of Angels', mission: 'BONUS. Find the 3 sacred lotuses that open the temple gate, defeat Kuçedra and reach the flag.' }
+};
+for (const id in LV_SQ) LV_SQ[id].id = id;
+// Normal: the short tour, good for showing the game to friends. Hard: unlocked after Bangkok, the full route with tougher rules.
+const ROUTES = {
+  normal: ['vlore', 'berat', 'gjiro', 'pogradec', 'theth', 'rozafa', 'helsinki', 'bangkok'],
+  hard:   ['vlore', 'durres', 'berat', 'gjiro', 'butrint', 'pogradec', 'kruje', 'theth', 'rozafa', 'helsinki', 'bangkok']
+};
+let MODE = 'normal', LEVELS = [], LEVELS_EN = [], NLV = 0, FIRST_BONUS = 0;
+function setMode(m) {
+  MODE = ROUTES[m] ? m : 'normal';
+  LEVELS = ROUTES[MODE].map(id => LV_SQ[id]); LEVELS_EN = ROUTES[MODE].map(id => LV_EN[id]);
+  NLV = LEVELS.length; FIRST_BONUS = LEVELS.findIndex(d => d.bonus);
+}
+const isHard = () => MODE === 'hard';
+const unl = () => save[isHard() ? 'unlockedHard' : 'unlocked'] || 1;
+function setUnl(n) { save[isHard() ? 'unlockedHard' : 'unlocked'] = clamp(n, 1, NLV); persist(); }
+// Saves from the 10-level version: carry progress over to the new short route (Pogradec takes Butrint's place)
+if (save.v !== 2) {
+  const oldIdx = { vlore: 0, durres: 1, berat: 2, gjiro: 3, butrint: 4, pogradec: 4, kruje: 5, theth: 6, rozafa: 7, helsinki: 8, bangkok: 9 };
+  const old = save.unlocked || 1;
+  save.unlocked = Math.max(1, ROUTES.normal.filter(id => oldIdx[id] < old).length);
+  save.v = 2; persist();
+}
+setMode(save.hard && save.mode === 'hard' ? 'hard' : 'normal');
+const lvTime = d => Math.round((d.time || 0) * (isHard() ? 0.8 : 1));
+const missionText = (i) => lv(i).mission.replace('{t}', lvTime(LEVELS[i]));
 let LANG = 'sq';
 const lv = i => LANG === 'en' ? LEVELS_EN[i] : LEVELS[i];
 const POW_T = {
@@ -651,6 +711,8 @@ const I18N = {
     overEye: 'LOJA MBAROI', overT: 'Oriku ra, por nuk u dorëzua', overH: 'Ngrihu dhe provo përsëri. Niveli rifillon me 3 jetë.', again: 'Provo përsëri',
     doneEye: 'NIVELI U KRYE', doneT: n => `${n}: e kryer`, inLevel: n => `${n} në nivel`, secrets: (f, n) => `Sekrete ${f}/${n}`, total: (l, p) => `Gjithsej: ${l} lekë · ${p} pikë`, nextLv: n => `Tjetri · ${n}`,
     winEye: 'FITORE', winT: 'Shqiponja është e lirë!', winSub: 'Oriku e mbajti besën. Flamuri ka sërish shqiponjën e vet.', record: ' · REKORD!', leftLives: n => `×${n} jetë mbetur`, playAgain: 'Luaj përsëri',
+    modeNormal: 'NORMAL', modeHard: 'I VËSHTIRË', hardTag: 'I VËSHTIRË', hardUnlocked: 'U hap modi i vështirë: 11 nivele, edhe Durrësi, Butrinti e Kruja, me një Kuçedër më të egër se kurrë.', hardBtn: 'Modi i vështirë ▸',
+    hardWinT: 'Edhe në modin e vështirë!', hardWinSub: 'Oriku e përshkoi Shqipërinë nga Vlora deri në Rozafë, pastaj Helsinkin dhe Bangkokun, pa u dorëzuar asnjëherë. Kuçedra s\'do ta harrojë kurrë.',
     bonusLbl: 'BONUS', bonusUnlocked: 'Por aventura nuk mbaroi: Kuçedra fluturoi drejt Helsinkit!', bonusWinT: 'Kuçedra u zhduk përgjithmonë!', bonusWinSub: 'Dritat e veriut ndriçojnë sërish mbi Helsinki, lotuset lulëzojnë në Bangkok, dhe Oriku ka ngrënë më shumë byrek se kurrë.',
     tok: {
       feather: { hud: 'PENDË', one: 'Pendë shqiponje', pl: 'pendë', all: 'Të 3 pendët! Tani kap flamurin.' },
@@ -676,6 +738,8 @@ const I18N = {
     overEye: 'GAME OVER', overT: 'Orik fell, but he did not give up', overH: 'Get back up and try again. The level restarts with 3 lives.', again: 'Try again',
     doneEye: 'LEVEL COMPLETE', doneT: n => `${n}: done`, inLevel: n => `${n} this level`, secrets: (f, n) => `Secrets ${f}/${n}`, total: (l, p) => `Total: ${l} lekë · ${p} points`, nextLv: n => `Next · ${n}`,
     winEye: 'VICTORY', winT: 'The eagle is free!', winSub: 'Orik kept his besa. The flag has its eagle back.', record: ' · NEW RECORD!', leftLives: n => `×${n} lives left`, playAgain: 'Play again',
+    modeNormal: 'NORMAL', modeHard: 'HARD', hardTag: 'HARD', hardUnlocked: 'Hard mode unlocked: 11 levels, with Durrës, Butrint and Krujë, and a Kuçedra angrier than ever.', hardBtn: 'Hard mode ▸',
+    hardWinT: 'Even on hard mode!', hardWinSub: 'Orik crossed Albania from Vlorë to Rozafa, then Helsinki and Bangkok, and never gave up. Kuçedra will never forget him.',
     bonusLbl: 'BONUS', bonusUnlocked: 'But the adventure is not over: Kuçedra flew to Helsinki!', bonusWinT: 'Kuçedra is gone for good!', bonusWinSub: 'The northern lights shine over Helsinki again, the lotuses bloom in Bangkok, and Orik has eaten more byrek than ever.',
     tok: {
       feather: { hud: 'FEATHERS', one: 'Eagle feather', pl: 'feathers', all: 'All 3 feathers! Now reach the flag.' },
@@ -821,6 +885,7 @@ const TRACKS = {
   mystic: mkTrack(124, 'D5 - Eb5 F#5 G5 - F#5 Eb5 | D5 - - . A4 Bb4 C5 D5 | Eb5 D5 C5 Bb4 A4 - G4 A4 | Bb4 A4 G4 F#4 G4 - - . | G4 A4 Bb4 C5 D5 - Eb5 D5 | F#5 - G5 F#5 Eb5 D5 C5 - | Bb4 C5 D5 Eb5 D5 C5 Bb4 A4 | D5 - - - - . . .', 'D2 D2 G2 D2 D2 D2 G2 D2', 'D.t.D.tt'),
   heroic: mkTrack(140, 'D5 - A4 D5 F5 - E5 D5 | C5 D5 E5 - A4 - - . | F5 - G5 A5 G5 F5 E5 D5 | E5 - C5 - D5 - - . | A5 - G5 F5 G5 - A5 C6 | A5 G5 F5 E5 F5 - D5 - | C5 D5 E5 F5 E5 D5 C5 A4 | D5 - - - D5 . . .', 'D2 C2 D2 C2 D2 C2 A1 D2', 'D.tDD.t.'),
   north: mkTrack(172 * 1.4, 'G5 A5 G5 F5 D5 - F5 G5 | A5 C6 A5 G5 F5 - D5 - | C5 D5 F5 G5 A5 G5 F5 D5 | G5 - - . D5 - G5 - | F5 G5 A5 - G5 F5 D5 C5 | D5 F5 G5 - A5 - C6 - | A5 G5 F5 D5 C5 D5 F5 D5 | G4 - G5 - G4 . . .', 'G2 G2 F2 G2 G2 C2 F2 G2', 'DtD.DtDt'),
+  lake: mkTrack(126, 'D5 - F5 G5 A5 - G5 F5 | E5 - ~D5 - C5 - D5 - | F5 - G5 A5 C6 - A5 G5 | A5 - - . G5 - - . | A5 - G5 F5 E5 - F5 G5 | F5 - E5 D5 C5 - A4 C5 | D5 E5 F5 E5 ~D5 - C5 A4 | D5 - - - - . . .', 'D2 D2 A1 D2 D2 C2 A1 D2', 'D..t..t.'),
   dark: mkTrack(112, 'A4 - C5 - E5 - D5 C5 | B4 - G#4 - A4 - - . | C5 D5 E5 F5 E5 - D5 C5 | B4 C5 D5 - E5 - - . | F5 - E5 D5 C5 - B4 A4 | G#4 A4 B4 C5 B4 - A4 G#4 | A4 - C5 E5 A5 - G#5 E5 | A5 - - - - . . .', 'A2 A2 E2 E2 A2 A2 E2 A2', 'D...D.t.'),
   finn: mkTrack(132, 'A4 - C5 D5 E5 - D5 C5 | D5 - E5 - A4 - - . | G4 A4 C5 - D5 C5 A4 G4 | A4 - - . E5 - - . | E5 - G5 E5 D5 - C5 D5 | E5 - D5 C5 A4 - G4 - | A4 C5 D5 E5 D5 C5 A4 G4 | A4 - - - - . . .', 'A2 A2 D2 A2 A2 G2 D2 A2', 'D...t...'),
   thai: mkTrack(156, 'G5 E5 D5 C5 D5 - E5 G5 | A5 G5 E5 - D5 - - . | C5 D5 E5 G5 A5 - G5 E5 | D5 E5 D5 C5 A4 - - . | E5 G5 A5 - C6 A5 G5 E5 | G5 - E5 D5 C5 D5 E5 - | A4 C5 D5 E5 G5 E5 D5 C5 | C5 - - - C5 . . .', 'C2 C2 G2 C2', 'DttDt.tt'),
@@ -984,11 +1049,42 @@ let carry = null; // size/power carried from the end of one level to the start o
 function loadLevel(i) {
   levelIdx = i; const def = LEVELS[i];
   crumbs.clear();
-  L = def.build(); L.t0 = L.t.slice(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
+  L = def.build(); if (isHard()) hardify(L); L.t0 = L.t.slice(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
   tiles = makeTiles(THEMES[L.theme]);
   levelLeke = 0; levelScore = 0; mission = { lambs: 0, keys: 0, pieces: 0, kills: 0, feathers: 0 }; cpActive = null; springHint = false;
   spawnAll();
   if (carry && carry.size === 'big') { player.size = 'big'; player.y -= 9; player.h = 24; player.power = carry.power; }
+}
+// Hard mode: same maps, meaner rules. Applied once per load, before the tile snapshot used for respawns.
+function hardify(L) {
+  L.hard = true;
+  const at = (x, y) => (x >= 0 && x < L.w && y >= 0 && y < ROWS) ? L.t[y * L.w + x] : 0;
+  const solid = (x, y) => { const v = at(x, y); return v && v !== T.HID_LIFE && v !== T.HID_COIN; };
+  // An extra beetle behind every second walker, only on open floor away from the start, checkpoints, arena and flag
+  const walkers = L.spawns.filter(s => s.type === 'beetle' || s.type === 'hedgehog');
+  walkers.forEach((s, i) => {
+    if (i % 2) return;
+    const tx = Math.floor(s.x / 16) + 3, ty = s.yb / 16 - 1;
+    if (tx < 16 || (L.goal && tx > L.goal.x / 16 - 12) || (L.arena && tx >= L.arena.x0 - 4) || (L.gateX != null && Math.abs(tx - L.gateX) < 4)) return;
+    if (L.cps.some(c => Math.abs(c.x / 16 - tx) < 4)) return;
+    if (solid(tx, ty) || solid(tx + 1, ty) || !solid(tx, ty + 1) || !solid(tx + 1, ty + 1) || at(tx, ty + 1) === T.CRUMBLE) return;
+    L.spawns.push({ type: 'beetle', x: tx * 16, yb: s.yb });
+  });
+  for (const s of L.spawns) if (s.type === 'fish') s.period = Math.round(s.period * 0.75);
+  // Only the first power-up block of the map survives (the one inside a boss arena always stays)
+  let firstPow = true;
+  for (let x = 0; x < L.w; x++) for (let y = 0; y < ROWS; y++) {
+    if (L.t[y * L.w + x] !== T.QPOW) continue;
+    if (L.arena && x > L.arena.x0 && x < L.arena.x1) continue;
+    if (firstPow) { firstPow = false; continue; }
+    L.t[y * L.w + x] = L.noCoins ? T.BRICK : T.QCOIN;
+  }
+  // Fewer checkpoints: keep every second one
+  if (L.cps.length >= 2) L.cps = L.cps.filter((c, i) => i % 2 === 1);
+  for (const c of L.cannons) { c.period = Math.round(c.period * 0.7); c.phase = Math.round(c.phase * 0.7); c.t = c.phase; }
+  for (const z of L.rockZones) z.period = Math.round(z.period * 0.7);
+  if (L.aval) L.aval.speed *= 1.15;
+  L.crumbleT = 20; L.ballSpd = 1.3; L.bossHp = (L.bossHp || 9) + 3; L.enemySpd = 1.35;
 }
 function makeEnemy(s) {
   const d = { beetle: [14, 11], hedgehog: [14, 10], crow: [14, 9], fish: [12, 8] }[s.type];
@@ -1005,7 +1101,7 @@ function spawnAll() {
     const a = L.arena; for (let y = 0; y <= 9; y++) L.t[y * L.w + a.x0] = 0; a.locked = false;
     if (!L.bossDead) for (let y = 0; y <= 9; y++) L.t[y * L.w + a.x1] = T.STONE;
   }
-  L.timeLeft = L.def.time || 0;
+  L.timeLeft = lvTime(L.def);
   rocks = [];
   for (const [k] of crumbs) { const [tx, ty] = k.split(',').map(Number); L.t[ty * L.w + tx] = T.CRUMBLE; }
   crumbs.clear();
@@ -1156,7 +1252,7 @@ function updPlayer() {
     const fy = Math.floor((p.y + p.h + 1) / 16);
     for (let tx = Math.floor(p.x / 16); tx <= Math.floor((p.x + p.w - 0.001) / 16); tx++) {
       const v = fy < ROWS && tx >= 0 && tx < L.w ? L.t[fy * L.w + tx] : 0;
-      if (v === T.CRUMBLE && !crumbs.has(tx + ',' + fy)) { crumbs.set(tx + ',' + fy, { t: 26, gone: false, r: 0 }); sfx('crack'); }
+      if (v === T.CRUMBLE && !crumbs.has(tx + ',' + fy)) { crumbs.set(tx + ',' + fy, { t: L.crumbleT || 26, gone: false, r: 0 }); sfx('crack'); }
     }
     const cx = Math.floor((p.x + p.w / 2) / 16);
     if (fy < ROWS && L.t[fy * L.w + cx] === T.SPRING) {
@@ -1187,7 +1283,7 @@ function afterDeath() {
 /* ---------------- world update ---------------- */
 function updEnemy(e) {
   if (!e.active) {
-    if (e.x < cam.x + VW + 24) { e.active = true; e.vx = ({ beetle: -0.45, hedgehog: -0.35, crow: -0.6 })[e.type] || e.vx || 0; }
+    if (e.x < cam.x + VW + 24) { e.active = true; e.vx = (({ beetle: -0.45, hedgehog: -0.35, crow: -0.6 })[e.type] || e.vx || 0) * (e.type === 'fish' ? 1 : L.enemySpd || 1); }
     else return;
   }
   e.t++;
@@ -1260,12 +1356,12 @@ function updBoss() {
   if (b.dying && L.bossFlees) { b.vy = Math.max(b.vy - 0.12, -3); b.y += b.vy; b.x += 1.6; b.face = 1; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + b.h, 2, 'snow'); if (b.y < -70) { boss = null; bossDefeated(); } return; }
   if (b.dying) { b.vy += 0.22; b.y += b.vy; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + Math.random() * b.h, 2, 'fire'); if (b.y > VH + 60) { boss = null; bossDefeated(); } return; }
   b.t++; if (b.inv > 0) b.inv--;
-  const speed = b.hp > 6 ? 0.8 : b.hp > 3 ? 1.1 : 1.45;
+  const speed = (b.hp > 6 ? 0.8 : b.hp > 3 ? 1.1 : 1.45) * (L.hard ? 1.15 : 1);
   b.vx = (b.vx < 0 ? -1 : 1) * speed;
   b.vy = Math.min(b.vy + 0.35, 6);
   const pv = b.vx; moveBody(b); if (b.hitWall) b.vx = -pv;
   b.face = (player.x + player.w / 2 < b.x + b.w / 2) ? -1 : 1;
-  const period = b.hp > 3 ? 150 : 110;
+  const period = (b.hp > 3 ? 150 : 110) - (L.hard ? 25 : 0);
   if (b.t % period === 0) { if (b.act % 2 === 0 && b.onGround) b.vy = -6.8; else b.fireQ = 3; b.act++; }
   if (b.fireQ > 0 && b.t % 16 === 0) {
     const offs = [28, 10, 0]; fires.push({ x: b.face > 0 ? b.x + b.w / 2 + 30 : b.x + b.w / 2 - 38, y: b.y + offs[b.fireN % 3], w: 8, h: 8, vx: b.face * 1.9, t: 0 });
@@ -1323,7 +1419,7 @@ function updCannons() {
     const k = c.t % c.period;
     if (k > c.period - 36 && k % 6 === 0) addPart('smoke', c.dir < 0 ? cx - 1 : cx + 15, c.ty * 16 + 6, c.dir * 0.3, -0.35, 22);
     if (k === 0) {
-      ents.push({ type: 'ball', x: c.dir < 0 ? cx - 10 : cx + 16, y: c.ty * 16 + 3, w: 10, h: 10, vx: c.dir * 1.0, vy: 0, active: true, dead: false, state: 'live', t: 0, face: c.dir });
+      ents.push({ type: 'ball', x: c.dir < 0 ? cx - 10 : cx + 16, y: c.ty * 16 + 3, w: 10, h: 10, vx: c.dir * (L.ballSpd || 1), vy: 0, active: true, dead: false, state: 'live', t: 0, face: c.dir });
       sfx('boom'); for (let i = 0; i < 4; i++) addPart('smoke', c.dir < 0 ? cx - 2 : cx + 18, c.ty * 16 + 8, c.dir * Math.random(), -0.3 - Math.random() * 0.4, 30);
     }
   }
@@ -1430,7 +1526,7 @@ function updFreeing() {
   if (stT > 30) L.eagleY -= 0.7;
   if (stT % 6 === 0) sparkle(L.cage.x + 16 + (Math.random() - 0.5) * 30, L.eagleY + 10, 2, Math.random() < 0.5 ? 'heart' : 'spark');
   updParts(); updCam();
-  if (stT > 230) showStory(storyEnd(), 0, victory);
+  if (stT > 230) { st = 'story'; tale(storyEnd(), victory); }
 }
 
 /* ---------------- rendering ---------------- */
@@ -1536,6 +1632,43 @@ function drawBG() {
     }
     const ro = cam.x * 0.6; ctx.fillStyle = '#4f7a3a';
     for (let i = -1; i < VW / 9 + 2; i++) { const k = Math.floor(ro / 9) + i; if (rnd(k + 31) < 0.5) continue; const x = Math.round(k * 9 - ro); ctx.fillRect(x, 150 + rnd(k) * 8, 1, 14); ctx.fillRect(x + 2, 154, 1, 10); }
+  } else if (L.theme === 'pogradec') {
+    ctx.fillStyle = '#fff1d0'; ctx.beginPath(); ctx.arc(VW - 64, 40, 13, 0, Math.PI * 2); ctx.fill();
+    clouds(0.08, 26, 'rgba(255,250,240,.75)');
+    // Mali i Thatë and Galičica across the lake, pale with distance
+    ridge(0.04, 15, 112, 46, '#a6b6c8', true);
+    ridge(0.08, 16, 119, 20, '#8197ab');
+    // Lake Ohrid: deep, clear blue with a lighter shoreline band and sun glitter
+    ctx.fillStyle = '#2b78b4'; ctx.fillRect(0, 118, VW, VH - 118);
+    ctx.fillStyle = '#4b9bd0'; ctx.fillRect(0, 118, VW, 2);
+    ctx.fillStyle = '#9ad6f2'; for (let i = 0; i < 16; i++) { const x = ((i * 57 - cam.x * 0.28 + frame * 0.18) % (VW + 40) + VW + 40) % (VW + 40) - 20; ctx.fillRect(x, 123 + (i % 6) * 6, 8 + (i % 3) * 4, 1); }
+    // Sail boats far out on the water
+    const so = cam.x * 0.12;
+    for (let i = -1; i < VW / 260 + 2; i++) {
+      const k = Math.floor(so / 260) + i; if (rnd(k + 81) < 0.35) continue;
+      const x = Math.round(k * 260 - so + 70 + Math.sin(frame * 0.01 + k) * 6), y = 124 + Math.floor(rnd(k + 82) * 3) * 3;
+      ctx.fillStyle = '#4a3020'; ctx.fillRect(x - 6, y, 12, 2); ctx.fillRect(x - 4, y + 2, 8, 1);
+      ctx.fillStyle = '#f4f1e8'; ctx.beginPath(); ctx.moveTo(x, y - 1); ctx.lineTo(x, y - 12); ctx.lineTo(x + 7, y - 1); ctx.fill();
+    }
+    // The castle hill of Pogradec, walls and a keep on top
+    const co = cam.x * 0.22;
+    for (let i = -1; i < VW / 620 + 2; i++) {
+      const k = Math.floor(co / 620) + i, x = Math.round(k * 620 - co + 420);
+      ctx.fillStyle = '#5f8a4b'; ctx.beginPath(); ctx.moveTo(x - 92, 130); ctx.quadraticCurveTo(x, 48, x + 92, 130); ctx.fill();
+      ctx.fillStyle = '#c9bfa8'; ctx.fillRect(x - 26, 84, 52, 12); for (let c = -26; c < 26; c += 7) ctx.fillRect(x + c, 80, 4, 4);
+      ctx.fillRect(x - 6, 68, 12, 16); ctx.fillStyle = '#8f8670'; ctx.fillRect(x - 8, 65, 16, 4);
+      ctx.fillStyle = '#3a2a22'; ctx.fillRect(x - 1, 73, 3, 5); ctx.fillRect(x - 18, 88, 3, 4); ctx.fillRect(x + 15, 88, 3, 4);
+      ctx.fillStyle = '#f2ebe0'; for (let h = 0; h < 5; h++) { const hx = x - 70 + h * 30 + (h > 2 ? 20 : 0), hy = 118 - (h === 1 || h === 3 ? 6 : 0); ctx.fillRect(hx, hy, 12, 9); ctx.fillStyle = '#9a4a2e'; ctx.fillRect(hx - 1, hy - 2, 14, 3); ctx.fillStyle = '#f2ebe0'; }
+    }
+    // Willows along the shore, their curtains swaying
+    const wo = cam.x * 0.5;
+    for (let i = -1; i < VW / 90 + 2; i++) {
+      const k = Math.floor(wo / 90) + i; if (rnd(k + 91) < 0.35) continue;
+      const x = Math.round(k * 90 - wo + 20);
+      ctx.fillStyle = '#5a4030'; ctx.fillRect(x, 126, 4, 38); ctx.fillRect(x - 4, 138, 4, 2); ctx.fillRect(x + 4, 132, 4, 2);
+      ctx.fillStyle = '#4f7f34'; ctx.beginPath(); ctx.ellipse(x + 2, 120, 19, 12, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#7fae55'; for (let q = -17; q <= 17; q += 3) { const len = 14 + rnd(k * 7 + q) * 14; ctx.fillRect(x + 2 + q + Math.round(Math.sin(frame * 0.03 + q * 0.4)), 118, 1, len); }
+    }
   } else if (L.theme === 'kruje') {
     clouds(0.07, 20, 'rgba(255,255,255,.8)');
     ridge(0.05, 12, 110, 78, '#8d9a86', true);
@@ -1770,6 +1903,10 @@ function drawPlats() {
     ctx.fillStyle = col; ctx.fillRect(x + 1, y + 1, q.w - 2, q.h);
     ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(x + 1, y + 1, q.w - 2, 1);
     ctx.fillStyle = 'rgba(0,0,0,.25)'; for (let k = 12; k < q.w; k += 12) ctx.fillRect(x + k, y + 2, 1, q.h - 1);
+    if (L.theme === 'pogradec') { // Ohrid boats: white deck over a blue painted hull
+      ctx.fillStyle = '#1a1418'; ctx.fillRect(x + 2, y + q.h + 2, q.w - 4, 5); ctx.fillRect(x + 6, y + q.h + 7, q.w - 12, 2);
+      ctx.fillStyle = '#2f6fa8'; ctx.fillRect(x + 3, y + q.h + 2, q.w - 6, 3); ctx.fillStyle = '#d7263d'; ctx.fillRect(x + 3, y + q.h + 2, q.w - 6, 1);
+    }
   }
 }
 function drawElephants() {
@@ -1901,7 +2038,9 @@ function paintEagle(canvas) { const c = canvas.getContext('2d'); c.imageSmoothin
 
 function toTitle() {
   st = 'title'; stopMusic(); setHud(false); loadLevel(0);
-  const lvls = LEVELS.map((d, i) => `<button class="lvb" type="button" data-l="${i}" ${i + 1 > save.unlocked ? 'disabled' : ''}><b>${i >= 8 ? say('bonusLbl') : say('lvLabel', i + 1)}</b>${i + 1 > save.unlocked ? say('locked') : lv(i).name}</button>`).join('');
+  const u = unl();
+  const lvls = LEVELS.map((d, i) => `<button class="lvb" type="button" data-l="${i}" ${i + 1 > u ? 'disabled' : ''}><b>${d.bonus ? say('bonusLbl') : say('lvLabel', i + 1)}</b>${i + 1 > u ? say('locked') : lv(i).name}</button>`).join('');
+  const modes = save.hard ? `<div class="modes"><button class="mode${isHard() ? '' : ' on'}" type="button" data-m="normal">${say('modeNormal')}</button><button class="mode hard${isHard() ? ' on' : ''}" type="button" data-m="hard">${say('modeHard')}</button></div>` : '';
   showScreen(`<div class="card title">
     <div class="brand">
       <div class="flagbox"><canvas id="tEagle" width="22" height="20"></canvas></div>
@@ -1909,13 +2048,14 @@ function toTitle() {
       <p class="tag">${say('tag')}</p>
     </div>
     <div class="side">
-      <div class="lv">${lvls}</div>
+      ${modes}<div class="lv tight">${lvls}</div>
       <div class="row"><button class="btn red" id="bPlay" type="button">${say('play')}</button><button class="btn ghost" id="bFs" type="button">${say('fs')}</button><button class="btn ghost" id="bLang" type="button">${say('other')}</button></div>
-      ${save.best ? `<p class="hint">${say('best', save.best)}</p>` : ''}
+      ${save[bestKey()] ? `<p class="hint">${say('best', save[bestKey()])}</p>` : ''}
       <p class="help">${say('help')}</p>
     </div></div>`);
   paintEagle($('tEagle'));
-  on('bPlay', () => newGame(save.unlocked - 1));
+  on('bPlay', () => newGame(unl() - 1));
+  scr.querySelectorAll('.mode').forEach(b => b.addEventListener('click', () => { audioInit(); if (b.dataset.m !== MODE) { setMode(b.dataset.m); save.mode = MODE; persist(); toTitle(); } }));
   on('bFs', () => goFullscreen());
   on('bLang', () => setLang(LANG === 'en' ? 'sq' : 'en', true));
   scr.querySelectorAll('.lvb').forEach(b => b.addEventListener('click', () => { audioInit(); newGame(+b.dataset.l); }));
@@ -1923,7 +2063,7 @@ function toTitle() {
 function newGame(i) {
   if (isCoarse() && !document.fullscreenElement) goFullscreen(true);
   lives = 3; totalLeke = 0; score = 0; carry = null;
-  if (i === 0) showStory(storyStart(), 0, () => startLevel(0)); else startLevel(i);
+  if (i === 0) tale(storyStart(), () => startLevel(0)); else startLevel(i);
 }
 function storyArt(kind) {
   if (kind === 'eagle') return EAGLE;
@@ -1936,6 +2076,7 @@ function storyArt(kind) {
   if (kind === 'lotus') return LOTUS;
   return ORIK.big.stand[0];
 }
+const tale = (pages, done) => isHard() ? done() : showStory(pages, 0, done);
 function showStory(pages, i, done) {
   st = 'story'; setHud(false);
   const last = i >= pages.length - 1, img = storyArt(pages[i].art);
@@ -1947,15 +2088,16 @@ function showStory(pages, i, done) {
   on('bSn', () => last ? done() : showStory(pages, i + 1, done));
   if (!last) on('bSk', done);
 }
-function recordBest() { if (score > (save.best || 0)) { save.best = score; persist(); return true; } return false; }
+const bestKey = () => isHard() ? 'bestHard' : 'best';
+function recordBest() { const k = bestKey(); if (score > (save[k] || 0)) { save[k] = score; persist(); return true; } return false; }
 function startLevel(i, noStory) {
   // Chapter pages (Zana before Theth, Kuçedra's escape before the bonus levels) show on first entry only, not on restarts
-  if (!noStory && LEVELS[i].story) { showStory(storyPages(LEVELS[i].story), 0, () => startLevel(i, true)); return; }
+  if (!noStory && !isHard() && LEVELS[i].story) { showStory(storyPages(LEVELS[i].story), 0, () => startLevel(i, true)); return; }
   loadLevel(i); st = 'intro'; setHud(false); stopMusic();
   const d = lv(i);
   showScreen(`<div class="card">
-    <p class="eyebrow">${say('lvEye', i + 1, NLV)}</p><h2>${d.name}</h2><p class="en">${d.en}</p>
-    <div class="mission"><b>${say('missionLbl')}</b>${d.mission}</div>
+    <p class="eyebrow">${say('lvEye', i + 1, NLV)}${isHard() ? ' · ' + say('hardTag') : ''}</p><h2>${d.name}</h2><p class="en">${d.en}</p>
+    <div class="mission"><b>${say('missionLbl')}</b>${missionText(i)}</div>
     <div class="stats"><span><span class="plis"></span>×${lives}</span><span><span class="coin">L</span>${totalLeke}</span><span>${say('pts', score)}</span></div>
     <p class="hint">${say('introHint', L.noCoins, L.secretsTotal)}</p>
     <div class="row"><button class="btn red" id="bGo" type="button">${say('startBtn')}</button></div></div>`);
@@ -1981,9 +2123,9 @@ function gameOver() {
 function levelComplete() {
   carry = { size: player.size, power: player.power };
   st = 'done'; setHud(false);
-  save.unlocked = Math.max(save.unlocked, Math.min(NLV, levelIdx + 2)); persist(); recordBest();
+  setUnl(Math.max(unl(), Math.min(NLV, levelIdx + 2))); recordBest();
   const next = levelIdx + 1;
-  if (next >= NLV) { showStory(storyPages('bonusEnd'), 0, () => victory(true)); return; }
+  if (next >= NLV) { tale(storyPages('bonusEnd'), () => victory(true)); return; }
   showScreen(`<div class="card"><p class="eyebrow">${say('doneEye')}</p><h2>${say('doneT', lv(levelIdx).name)}</h2>
     <div class="stats"><span><span class="coin">L</span>${say('inLevel', levelLeke)}</span><span>${say('pts', levelScore)}</span><span>${say('secrets', L.secretsFound, L.secretsTotal)}</span><span><span class="plis"></span>×${lives}</span></div>
     <p class="hint">${say('total', totalLeke, score)}</p>
@@ -1992,14 +2134,17 @@ function levelComplete() {
 }
 function victory(bonus) {
   bonus = bonus === true;
-  st = 'victory'; setHud(false); save.unlocked = bonus ? NLV : Math.max(save.unlocked, 9); persist(); const rec = recordBest();
+  st = 'victory'; setHud(false); setUnl(bonus ? NLV : Math.max(unl(), FIRST_BONUS + 1));
+  if (bonus && !isHard()) { save.hard = true; persist(); }
+  const rec = recordBest(), hardEnd = bonus && isHard();
   showScreen(`<div class="card">
     <div class="row"><div class="flagbox"><canvas id="vEagle" width="22" height="20"></canvas></div></div>
-    <p class="eyebrow">${say('winEye')}</p><h2>${say(bonus ? 'bonusWinT' : 'winT')}</h2><p class="en">${say(bonus ? 'bonusWinSub' : 'winSub')}</p>${bonus ? '' : `<p class="hint">${say('bonusUnlocked')}</p>`}
+    <p class="eyebrow">${say('winEye')}</p><h2>${say(hardEnd ? 'hardWinT' : bonus ? 'bonusWinT' : 'winT')}</h2><p class="en">${say(hardEnd ? 'hardWinSub' : bonus ? 'bonusWinSub' : 'winSub')}</p>${bonus ? (isHard() ? '' : `<p class="hint">${say('hardUnlocked')}</p>`) : `<p class="hint">${say('bonusUnlocked')}</p>`}
     <div class="stats"><span><span class="coin">L</span>${totalLeke} lekë</span><span>${say('pts', score)}${rec ? say('record') : ""}</span><span><span class="plis"></span>${say('leftLives', lives)}</span></div>
-    <div class="row">${bonus ? `<button class="btn red" id="bAgain" type="button">${say('playAgain')}</button>` : `<button class="btn red" id="bNext" type="button">${say('nextLv', lv(8).name)}</button>`}<button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
+    <div class="row">${bonus ? (isHard() ? `<button class="btn red" id="bAgain" type="button">${say('playAgain')}</button>` : `<button class="btn red" id="bHard" type="button">${say('hardBtn')}</button><button class="btn" id="bAgain" type="button">${say('playAgain')}</button>`) : `<button class="btn red" id="bNext" type="button">${say('nextLv', lv(FIRST_BONUS).name)}</button>`}<button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
   paintEagle($('vEagle'));
-  on('bAgain', () => newGame(0)); on('bNext', () => startLevel(8)); on('bQuit', toTitle);
+  on('bAgain', () => newGame(0)); on('bNext', () => startLevel(FIRST_BONUS)); on('bQuit', toTitle);
+  on('bHard', () => { setMode('hard'); save.mode = 'hard'; persist(); newGame(0); });
 }
 
 $('bPause').addEventListener('click', e => { e.stopPropagation(); pause(); });
