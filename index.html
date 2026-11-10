@@ -2050,8 +2050,8 @@ function hideScreen() { clearTimeout(autoTimer); scr.hidden = true; scr.innerHTM
 function on(id, fn) { const el = $(id); if (el) el.addEventListener('click', e => { e.stopPropagation(); audioInit(); fn(); }); }
 function setHud(show) { $('hud').hidden = !show; }
 function showPad() { if (isCoarse()) pad.classList.add('show'); }
-// Super Orik (big, mid-jump) for the title and language screens
-function paintHero(canvas) { const img = ORIK.big.jump[0]; canvas.width = img.width; canvas.height = img.height; const c = canvas.getContext('2d'); c.imageSmoothingEnabled = false; c.drawImage(img, 0, 0); }
+// Super Orik (big, standing) for the title and language screens
+function paintHero(canvas) { const img = ORIK.big.stand[0]; canvas.width = img.width; canvas.height = img.height; const c = canvas.getContext('2d'); c.imageSmoothingEnabled = false; c.drawImage(img, 0, 0); }
 function paintEagle(canvas) { const c = canvas.getContext('2d'); c.imageSmoothingEnabled = false; c.clearRect(0, 0, canvas.width, canvas.height); c.drawImage(EAGLE, 0, 0); }
 
 function toTitle() {
