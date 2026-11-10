@@ -80,8 +80,9 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-bo
 .flagbox{background:var(--flag);border:3px solid #000;padding:6px 10px;box-shadow:3px 3px 0 #000;line-height:0}
 .flagbox canvas{width:66px;height:60px;image-rendering:pixelated}
 .flagbox.helm{background:#2b2126}
-.flagbox.hero{background:linear-gradient(#7fc3ee,#d7eefa);padding:6px 14px}
-.flagbox.hero canvas{width:auto;height:84px}
+.herorow{display:flex;align-items:flex-end;justify-content:center;gap:14px}
+.hero{line-height:0}
+.hero canvas{width:auto;height:clamp(64px,13vw,92px);image-rendering:pixelated;filter:drop-shadow(3px 3px 0 #000)}
 .logo{margin:0;font-family:var(--font-logo);font-weight:400;font-size:clamp(40px,9vw,66px);letter-spacing:.04em;color:var(--flag);text-shadow:4px 4px 0 #000;line-height:1}
 .tag{margin:0;font-size:18px;font-weight:700;color:var(--paper)}
 .tag span{color:var(--muted)}
@@ -2060,8 +2061,7 @@ function toTitle() {
   const modes = save.hard ? `<div class="modes"><button class="mode${isHard() ? '' : ' on'}" type="button" data-m="normal">${say('modeNormal')}</button><button class="mode hard${isHard() ? ' on' : ''}" type="button" data-m="hard">${say('modeHard')}</button></div>` : '';
   showScreen(`<div class="card title">
     <div class="brand">
-      <div class="flagbox hero"><canvas id="tEagle" width="16" height="30"></canvas></div>
-      <h1 class="logo">ORIK</h1>
+      <div class="herorow"><div class="hero"><canvas id="tEagle" width="16" height="30"></canvas></div><h1 class="logo">ORIK</h1></div>
       <p class="tag">${say('tag')}</p>
     </div>
     <div class="side">
@@ -2228,7 +2228,7 @@ function setLang(l, toMenu) { LANG = l === 'en' ? 'en' : 'sq'; save.lang = LANG;
 function langPicker() {
   st = 'title'; stopMusic(); setHud(false); loadLevel(0);
   showScreen(`<div class="card">
-    <div class="brand"><div class="flagbox hero"><canvas id="lEagle" width="16" height="30"></canvas></div><h1 class="logo">ORIK</h1></div>
+    <div class="brand"><div class="herorow"><div class="hero"><canvas id="lEagle" width="16" height="30"></canvas></div><h1 class="logo">ORIK</h1></div></div>
     <p class="eyebrow">GJUHA · LANGUAGE</p><h2>Zgjidh gjuhën<br>Choose your language</h2>
     <div class="row"><button class="btn red" id="bSq" type="button">Shqip</button><button class="btn" id="bEn" type="button">English</button></div>
     <p class="hint">Mund ta ndryshosh më vonë nga menuja · You can change it later from the menu</p></div>`);
