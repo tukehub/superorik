@@ -1329,11 +1329,15 @@ function updEnemy(e) {
   else if (e.type === 'crow') { e.x += e.vx; e.y = e.baseY + Math.sin(e.t * 0.05) * 18; e.face = e.vx < 0 ? -1 : 1; if (e.x < -40) e.dead = true; }
   else { e.vy = Math.min(e.vy + 0.4, 5); const pv = e.vx; moveBody(e); if (e.hitWall) e.vx = -pv; e.face = e.vx < 0 ? -1 : 1; if (e.y > VH + 32) e.dead = true; }
   const p = player;
-  if (p.dead || e.state !== 'live' || !overlap(p, e)) return;
+  if (p.dead || e.state !== 'live') return;
+  // Stomps use Orik's boots (sprite width), not just his narrower body: landing on a beetle's tail edge squashes it
+  const boots = e.type !== 'fish' && e.type !== 'hedgehog' && p.vy > 0 && (p.y + p.h - p.vy) <= e.y + 8 && overlap({ x: p.x - 3, y: p.y, w: p.w + 6, h: p.h }, e);
+  if (!boots && !overlap(p, e)) return;
   // A fish that leaps into Orik's feet counts as a stomp, even if he is standing on a raft or still rising
-  const fromAbove = e.type === 'fish'
+  const fromAbove = boots || e.type === 'fish'
     ? (p.y + p.h - Math.max(p.vy, 0)) <= Math.max(e.y, e.py == null ? e.y : e.py) + 8
-    : p.vy > 0 && (p.y + p.h - p.vy) <= e.y + 5;
+    // Falling onto the top half counts as a stomp, corners and tail included (his feet were above its back a frame ago, or are in its upper half now)
+    : p.vy > 0 && ((p.y + p.h - p.vy) <= e.y + 8 || p.y + p.h <= e.y + e.h * 0.55);
   if (e.type !== 'hedgehog' && fromAbove) {
     if (e.type === 'crow' || e.type === 'ball' || e.type === 'fish') { e.state = 'flip'; e.vy = 0; } else { e.state = 'flat'; e.t = 0; }
     p.vy = input.a ? -5.4 : -3.8; sfx('stomp'); addPop(e.x, e.y - 4, '100'); addScore(100); mission.kills++;
@@ -1381,7 +1385,7 @@ function updBoss() {
   const b = boss; if (!b) return;
   if (b.dying && L.bossFlees) { b.vy = Math.max(b.vy - 0.12, -3); b.y += b.vy; b.x += 1.6; b.face = 1; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + b.h, 2, 'snow'); if (b.y < -70) { boss = null; bossDefeated(); } return; }
   if (b.dying) { b.vy += 0.22; b.y += b.vy; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + Math.random() * b.h, 2, 'fire'); if (b.y > VH + 60) { boss = null; bossDefeated(); } return; }
-  b.t++; if (b.inv > 0) b.inv--;
+  b.t++; if (b.inv > 0) b.inv--; b.py = b.y;
   const speed = L.easy ? 0.75 : (b.hp > 6 ? 0.8 : b.hp > 3 ? 1.1 : 1.45) * (L.hard ? 1.15 : 1);
   b.vx = (b.vx < 0 ? -1 : 1) * speed;
   b.vy = Math.min(b.vy + 0.35, 6);
@@ -1394,8 +1398,12 @@ function updBoss() {
     b.fireN++; b.fireQ--; sfx('fire');
   }
   const p = player;
-  if (!p.dead && overlap(p, b)) {
-    const fromAbove = p.vy > 0 && (p.y + p.h - p.vy) <= b.y + 10;
+  // Measured relative to Kuçedra: when she jumps up into Orik's feet it still counts as a hit on the head.
+  // Her three heads are drawn wider and taller than her body box, so landing on any of them counts too.
+  const bvy = b.py == null ? 0 : b.y - b.py, rel = p.vy - bvy;
+  const onHeads = !p.dead && rel > 0 && (p.y + p.h - rel) <= b.y + 12 && overlap({ x: p.x - 3, y: p.y, w: p.w + 6, h: p.h }, { x: b.x - 14, y: b.y - 10, w: b.w + 28, h: 22 });
+  if (!p.dead && (onHeads || overlap(p, b))) {
+    const fromAbove = onHeads || (rel > 0 && (p.y + p.h - rel) <= b.y + 12) || (p.y + p.h <= b.y + 10 && p.y + p.h / 2 < b.y);
     if (fromAbove) { p.vy = input.a ? -5.8 : -4.6; hitBoss(3); }
     else hurt();
   }
