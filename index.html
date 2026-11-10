@@ -94,7 +94,7 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-bo
 .lvb:not([disabled]):hover{border-color:var(--gold)}
 .lv.tight{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .lv.tight .lvb{font-size:14px;padding:6px 8px}
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.modes{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .mode{font-family:var(--font-display);font-size:13px;font-weight:900;letter-spacing:.04em;color:var(--paper);background:transparent;border:2px solid #5a4a50;padding:7px 8px;cursor:pointer}
 .mode.on{background:var(--gold);color:var(--ink);border-color:#000;box-shadow:2px 2px 0 #000}
 .mode.hard.on{background:var(--flag);color:var(--paper)}
@@ -666,6 +666,7 @@ const LV_EN = {
 for (const id in LV_SQ) LV_SQ[id].id = id;
 // Normal: the short tour, good for showing the game to friends. Hard: unlocked after Bangkok, the full route with tougher rules.
 const ROUTES = {
+  easy:   ['vlore', 'rozafa', 'helsinki', 'bangkok'],
   normal: ['vlore', 'berat', 'gjiro', 'pogradec', 'theth', 'rozafa', 'helsinki', 'bangkok'],
   hard:   ['vlore', 'durres', 'berat', 'gjiro', 'butrint', 'pogradec', 'kruje', 'theth', 'rozafa', 'helsinki', 'bangkok']
 };
@@ -675,18 +676,29 @@ function setMode(m) {
   LEVELS = ROUTES[MODE].map(id => LV_SQ[id]); LEVELS_EN = ROUTES[MODE].map(id => LV_EN[id]);
   NLV = LEVELS.length; FIRST_BONUS = LEVELS.findIndex(d => d.bonus);
 }
-const isHard = () => MODE === 'hard';
-const unl = () => save[isHard() ? 'unlockedHard' : 'unlocked'] || 1;
-function setUnl(n) { save[isHard() ? 'unlockedHard' : 'unlocked'] = clamp(n, 1, NLV); persist(); }
+const isHard = () => MODE === 'hard', isEasy = () => MODE === 'easy';
+// Easy → Normal → Hard: beating Bangkok in one mode opens the next
+const MODES = ['easy', 'normal', 'hard'];
+const UNL_KEY = { easy: 'unlockedEasy', normal: 'unlocked', hard: 'unlockedHard' };
+const modeOpen = m => m === 'easy' || (m === 'normal' && !!save.normalOpen) || (m === 'hard' && !!save.hard);
+const nextMode = () => MODES[MODES.indexOf(MODE) + 1] || null;
+const unl = () => save[UNL_KEY[MODE]] || 1;
+function setUnl(n) { save[UNL_KEY[MODE]] = clamp(n, 1, NLV); persist(); }
+const startLives = () => isEasy() ? 5 : 3;
+// Story pages: all of them in easy; in normal only Theth's (easy never visits Theth); none in hard
+const storyOn = key => isEasy() || (MODE === 'normal' && key === 'theth');
+const hadSave = save.v != null || save.lang != null || (save.unlocked || 1) > 1;
 // Saves from the 10-level version: carry progress over to the new short route (Pogradec takes Butrint's place)
-if (save.v !== 2) {
+if (save.v == null) {
   const oldIdx = { vlore: 0, durres: 1, berat: 2, gjiro: 3, butrint: 4, pogradec: 4, kruje: 5, theth: 6, rozafa: 7, helsinki: 8, bangkok: 9 };
   const old = save.unlocked || 1;
   save.unlocked = Math.max(1, ROUTES.normal.filter(id => oldIdx[id] < old).length);
   save.v = 2; persist();
 }
-setMode(save.hard && save.mode === 'hard' ? 'hard' : 'normal');
-const lvTime = d => Math.round((d.time || 0) * (isHard() ? 0.8 : 1));
+// v3 adds easy mode: anyone who already played keeps normal mode open
+if (save.v < 3) { if (hadSave) save.normalOpen = true; save.v = 3; persist(); }
+setMode(save.mode && modeOpen(save.mode) ? save.mode : save.normalOpen ? 'normal' : 'easy');
+const lvTime = d => Math.round((d.time || 0) * (isHard() ? 0.8 : isEasy() ? 1.5 : 1));
 const missionText = (i) => lv(i).mission.replace('{t}', lvTime(LEVELS[i]));
 let LANG = 'sq';
 const lv = i => LANG === 'en' ? LEVELS_EN[i] : LEVELS[i];
@@ -714,7 +726,7 @@ const I18N = {
     overEye: 'LOJA MBAROI', overT: 'Oriku ra, por nuk u dorëzua', overH: 'Ngrihu dhe provo përsëri. Niveli rifillon me 3 jetë.', again: 'Provo përsëri',
     doneEye: 'NIVELI U KRYE', doneT: n => `${n}: e kryer`, inLevel: n => `${n} në nivel`, secrets: (f, n) => `Sekrete ${f}/${n}`, total: (l, p) => `Gjithsej: ${l} lekë · ${p} pikë`, nextLv: n => `Tjetri · ${n}`,
     winEye: 'FITORE', winT: 'Shqiponja është e lirë!', winSub: 'Oriku e mbajti besën. Flamuri ka sërish shqiponjën e vet.', record: ' · REKORD!', leftLives: n => `×${n} jetë mbetur`, playAgain: 'Luaj përsëri',
-    modeNormal: 'NORMAL', modeHard: 'I VËSHTIRË', hardTag: 'I VËSHTIRË', hardUnlocked: 'U hap modi i vështirë: 11 nivele, edhe Durrësi, Butrinti e Kruja, me një Kuçedër më të egër se kurrë.', hardBtn: 'Modi i vështirë ▸',
+    modeEasy: 'E LEHTË', modeNormal: 'NORMAL', modeHard: 'I VËSHTIRË', hardTag: 'I VËSHTIRË', easyTag: 'E LEHTË', normalUnlocked: 'U hap modi normal: 8 nivele, me Beratin, Gjirokastrën, Pogradecin dhe Thethin, dhe armiq të vërtetë.', normalBtn: 'Modi normal ▸', hardUnlocked: 'U hap modi i vështirë: 11 nivele, edhe Durrësi, Butrinti e Kruja, me një Kuçedër më të egër se kurrë.', hardBtn: 'Modi i vështirë ▸',
     hardWinT: 'Edhe në modin e vështirë!', hardWinSub: 'Oriku e përshkoi Shqipërinë nga Vlora deri në Rozafë, pastaj Helsinkin dhe Bangkokun, pa u dorëzuar asnjëherë. Kuçedra s\'do ta harrojë kurrë.',
     bonusLbl: 'BONUS', bonusUnlocked: 'Por aventura nuk mbaroi: Kuçedra fluturoi drejt Helsinkit!', bonusWinT: 'Kuçedra u zhduk përgjithmonë!', bonusWinSub: 'Dritat e veriut ndriçojnë sërish mbi Helsinki, lotuset lulëzojnë në Bangkok, dhe Oriku ka ngrënë më shumë byrek se kurrë.',
     tok: {
@@ -741,7 +753,7 @@ const I18N = {
     overEye: 'GAME OVER', overT: 'Orik fell, but he did not give up', overH: 'Get back up and try again. The level restarts with 3 lives.', again: 'Try again',
     doneEye: 'LEVEL COMPLETE', doneT: n => `${n}: done`, inLevel: n => `${n} this level`, secrets: (f, n) => `Secrets ${f}/${n}`, total: (l, p) => `Total: ${l} lekë · ${p} points`, nextLv: n => `Next · ${n}`,
     winEye: 'VICTORY', winT: 'The eagle is free!', winSub: 'Orik kept his besa. The flag has its eagle back.', record: ' · NEW RECORD!', leftLives: n => `×${n} lives left`, playAgain: 'Play again',
-    modeNormal: 'NORMAL', modeHard: 'HARD', hardTag: 'HARD', hardUnlocked: 'Hard mode unlocked: 11 levels, with Durrës, Butrint and Krujë, and a Kuçedra angrier than ever.', hardBtn: 'Hard mode ▸',
+    modeEasy: 'EASY', modeNormal: 'NORMAL', modeHard: 'HARD', hardTag: 'HARD', easyTag: 'EASY', normalUnlocked: 'Normal mode unlocked: 8 levels, with Berat, Gjirokastër, Pogradec and Theth, and real enemies this time.', normalBtn: 'Normal mode ▸', hardUnlocked: 'Hard mode unlocked: 11 levels, with Durrës, Butrint and Krujë, and a Kuçedra angrier than ever.', hardBtn: 'Hard mode ▸',
     hardWinT: 'Even on hard mode!', hardWinSub: 'Orik crossed Albania from Vlorë to Rozafa, then Helsinki and Bangkok, and never gave up. Kuçedra will never forget him.',
     bonusLbl: 'BONUS', bonusUnlocked: 'But the adventure is not over: Kuçedra flew to Helsinki!', bonusWinT: 'Kuçedra is gone for good!', bonusWinSub: 'The northern lights shine over Helsinki again, the lotuses bloom in Bangkok, and Orik has eaten more byrek than ever.',
     tok: {
@@ -1048,11 +1060,22 @@ let carry = null; // size/power carried from the end of one level to the start o
 function loadLevel(i) {
   levelIdx = i; const def = LEVELS[i];
   crumbs.clear();
-  L = def.build(); if (isHard()) hardify(L); L.t0 = L.t.slice(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
+  L = def.build(); if (isHard()) hardify(L); else if (isEasy()) easify(L); L.t0 = L.t.slice(); L.def = def; L.gateOpen = false; L.bossDead = false; L.flagY = 26; L.eagleY = 0; L.freed = false;
   tiles = makeTiles(THEMES[L.theme]);
   levelLeke = 0; levelScore = 0; mission = { lambs: 0, keys: 0, pieces: 0, kills: 0, feathers: 0 }; cpActive = null; springHint = false;
   spawnAll();
   if (carry && carry.size === 'big') { player.size = 'big'; player.y -= 9; player.h = 24; player.power = carry.power; }
+}
+// Easy mode: the same maps with most of the danger taken out
+function easify(L) {
+  L.easy = true;
+  L.spawns = L.spawns.filter(s => s.type !== 'crow');
+  let w = 0, f = 0;
+  L.spawns = L.spawns.filter(s => (s.type === 'beetle' || s.type === 'hedgehog') ? (w++ % 2 === 0) : s.type === 'fish' ? (f++ % 2 === 0) : true);
+  for (const s of L.spawns) if (s.type === 'fish') s.period = Math.round(s.period * 1.4);
+  L.cannons = []; L.rockZones = [];
+  for (const q of L.plats) q.speed *= 0.75;
+  L.crumbleT = 40; L.bossHp = Math.max(2, Math.ceil((L.bossHp || 9) / 3)); L.enemySpd = 0.85;
 }
 // Hard mode: same maps, meaner rules. Applied once per load, before the tile snapshot used for respawns.
 function hardify(L) {
@@ -1359,12 +1382,12 @@ function updBoss() {
   if (b.dying && L.bossFlees) { b.vy = Math.max(b.vy - 0.12, -3); b.y += b.vy; b.x += 1.6; b.face = 1; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + b.h, 2, 'snow'); if (b.y < -70) { boss = null; bossDefeated(); } return; }
   if (b.dying) { b.vy += 0.22; b.y += b.vy; if (frame % 4 === 0) sparkle(b.x + Math.random() * b.w, b.y + Math.random() * b.h, 2, 'fire'); if (b.y > VH + 60) { boss = null; bossDefeated(); } return; }
   b.t++; if (b.inv > 0) b.inv--;
-  const speed = (b.hp > 6 ? 0.8 : b.hp > 3 ? 1.1 : 1.45) * (L.hard ? 1.15 : 1);
+  const speed = L.easy ? 0.75 : (b.hp > 6 ? 0.8 : b.hp > 3 ? 1.1 : 1.45) * (L.hard ? 1.15 : 1);
   b.vx = (b.vx < 0 ? -1 : 1) * speed;
   b.vy = Math.min(b.vy + 0.35, 6);
   const pv = b.vx; moveBody(b); if (b.hitWall) b.vx = -pv;
   b.face = (player.x + player.w / 2 < b.x + b.w / 2) ? -1 : 1;
-  const period = (b.hp > 3 ? 150 : 110) - (L.hard ? 25 : 0);
+  const period = L.easy ? 190 : (b.hp > 3 ? 150 : 110) - (L.hard ? 25 : 0);
   if (b.t % period === 0) { if (b.act % 2 === 0 && b.onGround) b.vy = -6.8; else b.fireQ = 3; b.act++; }
   if (b.fireQ > 0 && b.t % 16 === 0) {
     const offs = [28, 10, 0]; fires.push({ x: b.face > 0 ? b.x + b.w / 2 + 30 : b.x + b.w / 2 - 38, y: b.y + offs[b.fireN % 3], w: 8, h: 8, vx: b.face * 1.9, t: 0 });
@@ -1534,7 +1557,7 @@ function updFreeing() {
   if (stT > 30) L.eagleY -= 0.7;
   if (stT % 6 === 0) sparkle(L.cage.x + 16 + (Math.random() - 0.5) * 30, L.eagleY + 10, 2, Math.random() < 0.5 ? 'heart' : 'spark');
   updParts(); updCam();
-  if (stT > 230) { st = 'story'; tale(storyEnd(), victory); }
+  if (stT > 230) { st = 'story'; tale(storyEnd(), victory, 'end'); }
 }
 
 /* ---------------- rendering ---------------- */
@@ -2058,7 +2081,8 @@ function toTitle() {
   st = 'title'; stopMusic(); setHud(false); loadLevel(0);
   const u = unl();
   const lvls = LEVELS.map((d, i) => `<button class="lvb" type="button" data-l="${i}" ${i + 1 > u ? 'disabled' : ''}><b>${d.bonus ? say('bonusLbl') : say('lvLabel', i + 1)}</b>${i + 1 > u ? say('locked') : lv(i).name}</button>`).join('');
-  const modes = save.hard ? `<div class="modes"><button class="mode${isHard() ? '' : ' on'}" type="button" data-m="normal">${say('modeNormal')}</button><button class="mode hard${isHard() ? ' on' : ''}" type="button" data-m="hard">${say('modeHard')}</button></div>` : '';
+  const open = MODES.filter(modeOpen);
+  const modes = open.length > 1 ? `<div class="modes">${open.map(m => `<button class="mode${m === 'hard' ? ' hard' : ''}${m === MODE ? ' on' : ''}" type="button" data-m="${m}">${say('mode' + m[0].toUpperCase() + m.slice(1))}</button>`).join('')}</div>` : '';
   showScreen(`<div class="card title">
     <div class="brand">
       <div class="herorow"><div class="hero"><canvas id="tEagle" width="16" height="30"></canvas></div><h1 class="logo">ORIK</h1></div>
@@ -2079,8 +2103,8 @@ function toTitle() {
 }
 function newGame(i) {
   if (isCoarse() && !document.fullscreenElement) goFullscreen(true);
-  lives = 3; totalLeke = 0; score = 0; carry = null;
-  if (i === 0) tale(storyStart(), () => startLevel(0)); else startLevel(i);
+  lives = startLives(); totalLeke = 0; score = 0; carry = null;
+  if (i === 0) tale(storyStart(), () => startLevel(0), 'start'); else startLevel(i);
 }
 function storyArt(kind) {
   if (kind === 'eagle') return EAGLE;
@@ -2093,7 +2117,7 @@ function storyArt(kind) {
   if (kind === 'lotus') return LOTUS;
   return ORIK.big.stand[0];
 }
-const tale = (pages, done) => isHard() ? done() : showStory(pages, 0, done);
+const tale = (pages, done, key) => storyOn(key) ? showStory(pages, 0, done) : done();
 function showStory(pages, i, done) {
   st = 'story'; setHud(false);
   const last = i >= pages.length - 1, img = storyArt(pages[i].art);
@@ -2105,15 +2129,15 @@ function showStory(pages, i, done) {
   on('bSn', () => last ? done() : showStory(pages, i + 1, done));
   if (!last) on('bSk', done);
 }
-const bestKey = () => isHard() ? 'bestHard' : 'best';
+const bestKey = () => isHard() ? 'bestHard' : isEasy() ? 'bestEasy' : 'best';
 function recordBest() { const k = bestKey(); if (score > (save[k] || 0)) { save[k] = score; persist(); return true; } return false; }
 function startLevel(i, noStory) {
   // Chapter pages (Zana before Theth, Kuçedra's escape before the bonus levels) show on first entry only, not on restarts
-  if (!noStory && !isHard() && LEVELS[i].story) { showStory(storyPages(LEVELS[i].story), 0, () => startLevel(i, true)); return; }
+  if (!noStory && LEVELS[i].story && storyOn(LEVELS[i].story)) { showStory(storyPages(LEVELS[i].story), 0, () => startLevel(i, true)); return; }
   loadLevel(i); st = 'intro'; setHud(false); stopMusic();
   const d = lv(i);
   showScreen(`<div class="card">
-    <p class="eyebrow">${say('lvEye', i + 1, NLV)}${isHard() ? ' · ' + say('hardTag') : ''}</p><h2>${d.name}</h2><p class="en">${d.en}</p>
+    <p class="eyebrow">${say('lvEye', i + 1, NLV)}${isHard() ? ' · ' + say('hardTag') : isEasy() ? ' · ' + say('easyTag') : ''}</p><h2>${d.name}</h2><p class="en">${d.en}</p>
     <div class="mission"><b>${say('missionLbl')}</b>${missionText(i)}</div>
     <div class="stats"><span><span class="plis"></span>×${lives}</span><span><span class="coin">L</span>${totalLeke}</span><span>${say('pts', score)}</span></div>
     <p class="hint">${say('introHint', L.noCoins, L.secretsTotal)}</p>
@@ -2135,14 +2159,14 @@ function gameOver() {
   recordBest(); st = 'over'; stopMusic(); setHud(false);
   showScreen(`<div class="card"><p class="eyebrow">${say('overEye')}</p><h2>${say('overT')}</h2><p class="hint">${say('overH')}</p>
     <div class="row"><button class="btn red" id="bAgain" type="button">${say('again')}</button><button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
-  on('bAgain', () => { lives = 3; score = 0; startLevel(levelIdx, true); }); on('bQuit', toTitle);
+  on('bAgain', () => { lives = startLives(); score = 0; startLevel(levelIdx, true); }); on('bQuit', toTitle);
 }
 function levelComplete() {
   carry = { size: player.size, power: player.power };
   st = 'done'; setHud(false);
   setUnl(Math.max(unl(), Math.min(NLV, levelIdx + 2))); recordBest();
   const next = levelIdx + 1;
-  if (next >= NLV) { tale(storyPages('bonusEnd'), () => victory(true)); return; }
+  if (next >= NLV) { tale(storyPages('bonusEnd'), () => victory(true), 'bonusEnd'); return; }
   showScreen(`<div class="card"><p class="eyebrow">${say('doneEye')}</p><h2>${say('doneT', lv(levelIdx).name)}</h2>
     <div class="stats"><span><span class="coin">L</span>${say('inLevel', levelLeke)}</span><span>${say('pts', levelScore)}</span><span>${say('secrets', L.secretsFound, L.secretsTotal)}</span><span><span class="plis"></span>×${lives}</span></div>
     <p class="hint">${say('total', totalLeke, score)}</p>
@@ -2152,16 +2176,17 @@ function levelComplete() {
 function victory(bonus) {
   bonus = bonus === true;
   st = 'victory'; setHud(false); setUnl(bonus ? NLV : Math.max(unl(), FIRST_BONUS + 1));
-  if (bonus && !isHard()) { save.hard = true; persist(); }
+  const nm = bonus ? nextMode() : null;
+  if (nm) { save[nm === 'normal' ? 'normalOpen' : 'hard'] = true; persist(); }
   const rec = recordBest(), hardEnd = bonus && isHard();
   showScreen(`<div class="card">
     <div class="row"><div class="flagbox"><canvas id="vEagle" width="22" height="20"></canvas></div></div>
-    <p class="eyebrow">${say('winEye')}</p><h2>${say(hardEnd ? 'hardWinT' : bonus ? 'bonusWinT' : 'winT')}</h2><p class="en">${say(hardEnd ? 'hardWinSub' : bonus ? 'bonusWinSub' : 'winSub')}</p>${bonus ? (isHard() ? '' : `<p class="hint">${say('hardUnlocked')}</p>`) : `<p class="hint">${say('bonusUnlocked')}</p>`}
+    <p class="eyebrow">${say('winEye')}</p><h2>${say(hardEnd ? 'hardWinT' : bonus ? 'bonusWinT' : 'winT')}</h2><p class="en">${say(hardEnd ? 'hardWinSub' : bonus ? 'bonusWinSub' : 'winSub')}</p>${bonus ? (nm ? `<p class="hint">${say(nm + 'Unlocked')}</p>` : '') : `<p class="hint">${say('bonusUnlocked')}</p>`}
     <div class="stats"><span><span class="coin">L</span>${totalLeke} lekë</span><span>${say('pts', score)}${rec ? say('record') : ""}</span><span><span class="plis"></span>${say('leftLives', lives)}</span></div>
-    <div class="row">${bonus ? (isHard() ? `<button class="btn red" id="bAgain" type="button">${say('playAgain')}</button>` : `<button class="btn red" id="bHard" type="button">${say('hardBtn')}</button><button class="btn" id="bAgain" type="button">${say('playAgain')}</button>`) : `<button class="btn red" id="bNext" type="button">${say('nextLv', lv(FIRST_BONUS).name)}</button>`}<button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
+    <div class="row">${bonus ? (nm ? `<button class="btn red" id="bMode" type="button">${say(nm + 'Btn')}</button><button class="btn" id="bAgain" type="button">${say('playAgain')}</button>` : `<button class="btn red" id="bAgain" type="button">${say('playAgain')}</button>`) : `<button class="btn red" id="bNext" type="button">${say('nextLv', lv(FIRST_BONUS).name)}</button>`}<button class="btn ghost" id="bQuit" type="button">${say('menu')}</button></div></div>`);
   paintEagle($('vEagle'));
   on('bAgain', () => newGame(0)); on('bNext', () => startLevel(FIRST_BONUS)); on('bQuit', toTitle);
-  on('bHard', () => { setMode('hard'); save.mode = 'hard'; persist(); newGame(0); });
+  on('bMode', () => { setMode(nm); save.mode = nm; persist(); newGame(0); });
 }
 
 $('bPause').addEventListener('click', e => { e.stopPropagation(); pause(); });
