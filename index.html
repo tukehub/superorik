@@ -335,6 +335,9 @@ const SHOT_SPR = { olive: SHOT, blueberry: mk(['.mmmm.','mviivm','mvivvm','mvvvv
 const FIRE = [mk(['..fFF...','.fFFFF..','fFFfFFF.','FFffFFFF','FFffFFFF','fFFfFFF.','.fFFFF..','..fFF...']), mk(['...FFf..','..FFFFf.','.FFFfFFf','FFFFffFF','FFFFffFF','.FFFfFFf','..FFFFf.','...FFf..'])];
 const EAGLE_HALF = ['.....KK....','....KKKK...','...KKKKK...','..KK.KKK...','......KKK..','K......KKK.','KK......KKK','KKK....KKKK','.KKK..KKKKK','K.KKKKKKKKK','KK.KKKKKKKK','.KK.KKKKKKK','..KK.KKKKKK','...KK.KKKKK','....K.KKKKK','......KKKKK','.......KKKK','......K.KKK','.....K..K.K','........K..'];
 const EAGLE = mk(EAGLE_HALF.map(r => r + r.split('').reverse().join('')));
+const EAGLE_GLOW = mk(EAGLE_HALF.map(r => r + r.split('').reverse().join('')), Object.assign({}, PAL, { K: '#ffe7a3' }));
+// The black eagle alone, with a thin warm outline so it reads against any sky
+function drawEagleFree(x, y, w, h) { for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) ctx.drawImage(EAGLE_GLOW, x + dx, y + dy, w, h); ctx.drawImage(EAGLE, x, y, w, h); }
 const KUCEDRA = both(mk([ // three heads
   '......................d................',
   '.......................dd..............',
@@ -1558,14 +1561,21 @@ function updClear() {
 }
 function startFreeing() {
   shots = [];
-  carry = { size: player.size, power: player.power }; st = 'freeing'; stT = 0; L.freed = true; L.eagleY = L.cage.y + 6; stopMusic(); sfx('win');
+  carry = { size: player.size, power: player.power }; st = 'freeing'; stT = 0; L.freed = true; L.eagleOn = false; L.eagleX = L.cage.x + 5; L.eagleY = L.cage.y + 6; stopMusic(); sfx('win');
 }
+// Empty red flag on the stone base beside the cage: the freed eagle takes her place in the middle of it
+const roFlag = () => ({ px: 199 * 16 - 1, top: 40, fx: 199 * 16 + 1, fw: 36, fh: 26 });
 function updFreeing() {
   stT++;
-  if (stT > 30) L.eagleY -= 0.7;
-  if (stT % 6 === 0) sparkle(L.cage.x + 16 + (Math.random() - 0.5) * 30, L.eagleY + 10, 2, Math.random() < 0.5 ? 'heart' : 'spark');
+  const f = roFlag(), x0 = L.cage.x + 5, y0 = L.cage.y + 6, x1 = f.fx + 7, y1 = f.top + 3;
+  if (stT > 30 && !L.eagleOn) {
+    const k = Math.min(1, (stT - 30) / 110), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    L.eagleX = x0 + (x1 - x0) * e; L.eagleY = y0 + (y1 - y0) * e - Math.sin(k * Math.PI) * 34;
+    if (k >= 1) { L.eagleOn = true; sfx('one'); for (let i = 0; i < 4; i++) sparkle(f.fx + f.fw / 2, f.top + f.fh / 2, 6, 'spark'); }
+  }
+  if (stT % 6 === 0 && !L.eagleOn) sparkle(L.eagleX + 11, L.eagleY + 10, 2, Math.random() < 0.5 ? 'heart' : 'spark');
   updParts(); updCam();
-  if (stT > 230) { st = 'story'; tale(storyEnd(), victory, 'end'); }
+  if (stT > 250) { st = 'story'; tale(storyEnd(), victory, 'end'); }
 }
 
 /* ---------------- rendering ---------------- */
@@ -1924,14 +1934,18 @@ function drawCPs() {
 function drawCage() {
   const c = L.cage; if (!c) return;
   const x = sx(c.x); if (x < -40 || x > VW + 40) return;
-  if (!L.freed) { ctx.fillStyle = '#d7263d'; ctx.fillRect(x + 3, c.y + 5, 26, 24); ctx.drawImage(EAGLE, x + 5, c.y + 7); }
+  // The empty flag waits on its pole; once freed, the eagle settles in the middle of it
+  const f = roFlag(), fx = sx(f.fx), px = sx(f.px);
+  ctx.fillStyle = '#3a3036'; ctx.fillRect(px, f.top - 3, 2, 9 * 16 - f.top + 3); ctx.fillStyle = '#f5c542'; ctx.fillRect(px - 1, f.top - 5, 4, 3);
+  for (let i = 0; i < f.fw; i += 4) { const wv = Math.round(Math.sin(frame * 0.08 - i * 0.18) * 1.5 * (i / f.fw)); ctx.fillStyle = '#d7263d'; ctx.fillRect(fx + i, f.top + wv, 4, f.fh); ctx.fillStyle = '#a81d30'; ctx.fillRect(fx + i, f.top + wv + f.fh - 2, 4, 2); }
+  if (L.eagleOn) ctx.drawImage(EAGLE, fx + 7, f.top + 3);
+  if (!L.freed) drawEagleFree(x + 5, c.y + 7, 22, 20);
   ctx.fillStyle = '#55565c'; ctx.fillRect(x, c.y, 32, 4); ctx.fillRect(x, c.y + 28, 32, 4);
   ctx.fillStyle = '#9a9ca3';
   for (let i = 0; i < 6; i++) { if (L.bossDead && (i === 2 || i === 3)) continue; ctx.fillRect(x + 2 + i * 5.6, c.y + 4, 2, 24); }
-  if (L.freed) {
-    const flap = Math.sin(frame * 0.3) > 0 ? 1 : 0.7, ey = Math.round(L.eagleY);
-    ctx.fillStyle = 'rgba(215,38,61,.9)'; ctx.fillRect(x + 1, ey - 3, 30, 26);
-    const h = Math.round(20 * flap); ctx.drawImage(EAGLE, x + 5, ey + (20 - h) / 2, 22, h);
+  if (L.freed && !L.eagleOn) {
+    const flap = Math.sin(frame * 0.3) > 0 ? 1 : 0.7, ey = Math.round(L.eagleY), h = Math.round(20 * flap);
+    drawEagleFree(Math.round(sx(L.eagleX)), ey + (20 - h) / 2, 22, h);
   }
 }
 function drawPlats() {
